@@ -1,0 +1,158 @@
+@model SistemaAsistencia.Models.EmailSettingsViewModel
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>Configuración de Correo Electrónico</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="UpdateEmailSettings" method="post">
+            <div class="mb-3">
+                <div class="form-check">
+                    <input asp-for="EmailEnabled" class="form-check-input" type="checkbox" id="emailEnabled" />
+                    <label class="form-check-label" for="emailEnabled">
+                        Habilitar envío de correos electrónicos
+                    </label>
+                </div>
+            </div>
+
+            <div id="emailConfig" style="display: none;">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="SmtpServer" class="form-label"></label>
+                        <input asp-for="SmtpServer" class="form-control" placeholder="smtp.gmail.com" />
+                        <span asp-validation-for="SmtpServer" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="SmtpPort" class="form-label"></label>
+                        <input asp-for="SmtpPort" class="form-control" type="number" />
+                        <span asp-validation-for="SmtpPort" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="EmailUsername" class="form-label"></label>
+                        <input asp-for="EmailUsername" class="form-control" placeholder="tu-email@gmail.com" />
+                        <span asp-validation-for="EmailUsername" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="EmailPassword" class="form-label"></label>
+                        <input asp-for="EmailPassword" class="form-control" type="password" placeholder="Contraseña de aplicación" />
+                        <span asp-validation-for="EmailPassword" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="FromEmail" class="form-label"></label>
+                        <input asp-for="FromEmail" class="form-control" placeholder="noreply@empresa.com" />
+                        <span asp-validation-for="FromEmail" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="FromName" class="form-label"></label>
+                        <input asp-for="FromName" class="form-control" placeholder="Sistema de Asistencia" />
+                        <span asp-validation-for="FromName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>⚠️ Importante:</strong> Para probar la conexión, primero debes <strong>GUARDAR</strong> la configuración de email y luego hacer clic en "Probar Conexión".
+                    <br><br>
+                    <strong>Nota:</strong> Para Gmail, necesitas usar una "Contraseña de aplicación" en lugar de tu contraseña normal. 
+                    <a href="https://support.google.com/accounts/answer/185833" target="_blank">Ver cómo crear una contraseña de aplicación</a>
+                    <br><br>
+                    <strong>📖 Guía completa:</strong> <a href="~/CONFIGURAR_GMAIL.md" target="_blank">Ver guía de configuración de Gmail</a>
+                </div>
+
+                <!-- Plantillas de Email -->
+                <hr>
+                <h6>Plantillas de Email</h6>
+                
+                <div class="mb-3">
+                    <label asp-for="WelcomeEmailTemplate" class="form-label"></label>
+                    <textarea asp-for="WelcomeEmailTemplate" class="form-control" rows="8" placeholder="Plantilla para emails de bienvenida"></textarea>
+                    <span asp-validation-for="WelcomeEmailTemplate" class="text-danger"></span>
+                    <div class="form-text">
+                        <strong>Variables disponibles:</strong> {CompanyName}, {UserName}, {QrCode}, {SystemUrl}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="AttendanceEmailTemplate" class="form-label"></label>
+                    <textarea asp-for="AttendanceEmailTemplate" class="form-control" rows="8" placeholder="Plantilla para emails de asistencia"></textarea>
+                    <span asp-validation-for="AttendanceEmailTemplate" class="text-danger"></span>
+                    <div class="form-text">
+                        <strong>Variables disponibles:</strong> {CompanyName}, {UserName}, {RecordType}, {Date}, {Time}, {Status}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="@Url.Action("Index")" class="btn btn-secondary">Volver al Panel</a>
+                <div>
+                    <button type="button" id="testConnectionBtn" class="btn btn-info me-2">
+                        <i class="fas fa-wifi"></i> Probar Conexión
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-envelope"></i> Guardar Configuración de Email
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const emailEnabledCheckbox = document.getElementById('emailEnabled');
+        const emailConfigDiv = document.getElementById('emailConfig');
+        
+        // Función para mostrar/ocultar configuración de email
+        function toggleEmailConfig() {
+            if (emailEnabledCheckbox.checked) {
+                emailConfigDiv.style.display = 'block';
+            } else {
+                emailConfigDiv.style.display = 'none';
+            }
+        }
+        
+        // Event listener para el checkbox
+        emailEnabledCheckbox.addEventListener('change', toggleEmailConfig);
+        
+        // Mostrar configuración si ya está habilitada
+        toggleEmailConfig();
+        
+        // Botón de prueba de conexión
+        const testConnectionBtn = document.getElementById('testConnectionBtn');
+        if (testConnectionBtn) {
+            testConnectionBtn.addEventListener('click', async function() {
+                const originalText = testConnectionBtn.innerHTML;
+                testConnectionBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Probando...';
+                testConnectionBtn.disabled = true;
+                
+                try {
+                    const response = await fetch('@Url.Action("TestEmailConnection")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        alert('✅ Conexión SMTP exitosa! La configuración de email está funcionando correctamente.');
+                    } else {
+                        alert('❌ Error de conexión: ' + (result.message || 'No se pudo conectar al servidor SMTP'));
+                    }
+                } catch (error) {
+                    alert('❌ Error al probar la conexión: ' + error.message);
+                } finally {
+                    testConnectionBtn.innerHTML = originalText;
+                    testConnectionBtn.disabled = false;
+                }
+            });
+        }
+    });
+</script>

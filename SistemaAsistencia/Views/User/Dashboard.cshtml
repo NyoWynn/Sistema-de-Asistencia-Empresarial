@@ -1,0 +1,219 @@
+@model SistemaAsistencia.Models.User
+
+@{
+    ViewData["Title"] = "Mi Panel de Usuario";
+}
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="mb-1">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                ¡Hola, @Model.Name!
+                            </h2>
+                            <p class="mb-0">Bienvenido a tu panel de usuario</p>
+                        </div>
+                        <div class="text-end">
+                            <div class="badge bg-light text-dark fs-6">
+                                <i class="fas fa-calendar me-1"></i>
+                                @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estadísticas del mes -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title">Días Trabajados</h4>
+                            <h2 class="mb-0">@ViewBag.TotalDays</h2>
+                            <small>@ViewBag.CurrentMonth</small>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-calendar-check fa-3x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title">Horas Totales</h4>
+                            <h2 class="mb-0">@ViewBag.TotalHours</h2>
+                            <small>@ViewBag.CurrentMonth</small>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-clock fa-3x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="card-title">Estado</h4>
+                            <h2 class="mb-0">Activo</h2>
+                            <small>Usuario Regular</small>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-user-check fa-3x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registros recientes y acciones rápidas -->
+    <div class="row">
+        <!-- Registros recientes -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>
+                        Registros Recientes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.AttendanceRecords != null && ((List<AttendanceRecord>)ViewBag.AttendanceRecords).Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Tipo</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var record in (List<AttendanceRecord>)ViewBag.AttendanceRecords)
+                                    {
+                                        <tr>
+                                            <td>@record.Timestamp.ToString("dd/MM/yyyy")</td>
+                                            <td>@record.Timestamp.ToString("HH:mm")</td>
+                                            <td>
+                                                @if (record.RecordType == "Entrada")
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-sign-in-alt me-1"></i>
+                                                        Entrada
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">
+                                                        <i class="fas fa-sign-out-alt me-1"></i>
+                                                        Salida
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">Registrado</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a asp-action="AttendanceHistory" class="btn btn-outline-primary">
+                                <i class="fas fa-list me-1"></i>
+                                Ver Historial Completo
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No hay registros recientes</h5>
+                            <p class="text-muted">Tus registros de asistencia aparecerán aquí</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bolt me-2"></i>
+                        Acciones Rápidas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="Profile" class="btn btn-outline-primary">
+                            <i class="fas fa-user me-2"></i>
+                            Mi Perfil
+                        </a>
+                        <a asp-action="ChangePassword" class="btn btn-outline-warning">
+                            <i class="fas fa-key me-2"></i>
+                            Cambiar Contraseña
+                        </a>
+                        <a asp-action="AttendanceHistory" class="btn btn-outline-info">
+                            <i class="fas fa-history me-2"></i>
+                            Historial de Asistencia
+                        </a>
+                        <a asp-controller="Attendance" asp-action="Index" class="btn btn-outline-success">
+                            <i class="fas fa-qrcode me-2"></i>
+                            Marcar Asistencia
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información del usuario -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Información
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <strong>Email:</strong><br>
+                        <small class="text-muted">@Model.Email</small>
+                    </div>
+                    <div class="mb-2">
+                        <strong>QR Code:</strong><br>
+                        <code class="small">@Model.QrCode</code>
+                    </div>
+                    <div class="mb-0">
+                        <strong>Miembro desde:</strong><br>
+                        <small class="text-muted">@DateTime.Now.ToString("MMMM yyyy")</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

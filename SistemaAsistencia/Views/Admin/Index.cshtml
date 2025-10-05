@@ -1,0 +1,219 @@
+﻿@model IEnumerable<SistemaAsistencia.Models.User>
+
+@{
+    ViewData["Title"] = "Panel de Administración";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        @TempData["WarningMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-times-circle me-2"></i>
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Acciones Rápidas</h4>
+
+            <hr />
+            <a asp-action="Create" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Crear Nuevo Usuario
+            </a>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4>Configuración del Sistema</h4>
+            
+            <hr />
+
+            <a asp-controller="Admin" asp-action="CompanySettings" class="btn btn-secondary">
+                <i class="bi bi-gear"></i> Configuración de Empresa
+            </a>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4>Reportes de Asistencia</h4>
+            
+            <hr />
+
+            <a asp-controller="Admin" asp-action="MonthlyReport" class="btn btn-primary">
+                <i class="bi bi-calendar-month"></i> Reporte General Mensual
+            </a>
+           
+            <hr />
+            <a asp-controller="Admin" asp-action="LateArrivalsReport" class="btn btn-warning">
+                <i class="bi bi-clock-history"></i> Reporte de Atrasos
+            </a>
+            <a asp-controller="Admin" asp-action="EarlyDeparturesReport" class="btn btn-info">
+                <i class="bi bi-box-arrow-right"></i> Reporte de Salidas Anticipadas
+            </a>
+            <a asp-controller="Admin" asp-action="AbsenceReport" class="btn btn-danger">
+                <i class="bi bi-calendar-x"></i> Reporte de Inasistencias
+            </a>
+        </div>
+    </div>
+    <hr />
+  
+
+    <a asp-action="ManualRecord" class="btn btn-info">
+        <i class="bi bi-pencil-square"></i> Registrar Asistencia Manualmente
+    </a>
+    <form asp-action="SimulateRecords" method="post" class="d-inline" onsubmit="return confirm('¿Está seguro? Esto borrará todos los registros de asistencia existentes y creará nuevos datos de prueba.');">
+    </form>
+</div>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Lista de Usuarios</h4>
+        <div class="text-muted">
+            <small>Mostrando @(((ViewData["CurrentPage"] as int? ?? 1) - 1) * (ViewData["PageSize"] as int? ?? 10) + 1) - @Math.Min((ViewData["CurrentPage"] as int? ?? 1) * (ViewData["PageSize"] as int? ?? 10), ViewData["TotalRecords"] as int? ?? 0) de @ViewData["TotalRecords"] usuarios</small>
+        </div>
+    </div>
+    <hr />
+    
+    <!-- Barra de búsqueda -->
+    <form asp-action="Index" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="input-group">
+                    <input type="text" name="searchString" class="form-control" placeholder="Buscar por nombre o email..." value="@ViewData["CurrentFilter"]">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Limpiar
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <label class="input-group-text" for="pageSize">Mostrar:</label>
+                    <select name="pageSize" id="pageSize" class="form-select" onchange="this.form.submit()">
+                        <option value="5" selected="@(ViewData["PageSize"]?.ToString() == "5")">5</option>
+                        <option value="10" selected="@(ViewData["PageSize"]?.ToString() == "10")">10</option>
+                        <option value="25" selected="@(ViewData["PageSize"]?.ToString() == "25")">25</option>
+                        <option value="50" selected="@(ViewData["PageSize"]?.ToString() == "50")">50</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="pageNumber" value="1" />
+    </form>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                <th>@Html.DisplayNameFor(model => model.IsAdmin)</th>
+                <th>Código QR</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IsAdmin)</td>
+                    <td>
+                        <a asp-action="ShowQr" asp-route-id="@item.Id" class="btn btn-success btn-sm">
+                            <i class="fas fa-qrcode"></i> Ver QR
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="ViewUserProfile" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                            <i class="fas fa-user"></i> Perfil
+                        </a> |
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalles</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+    <!-- Controles de Paginación -->
+    @if (ViewData["TotalPages"] as int? > 1)
+    {
+        <nav aria-label="Paginación de usuarios" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <!-- Botón Primera Página -->
+                <li class="page-item @(ViewData["HasPreviousPage"] as bool? == true ? "" : "disabled")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="1" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">
+                        <i class="bi bi-chevron-double-left"></i> Primera
+                    </a>
+                </li>
+                
+                <!-- Botón Página Anterior -->
+                <li class="page-item @(ViewData["HasPreviousPage"] as bool? == true ? "" : "disabled")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@ViewData["PreviousPageNumber"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">
+                        <i class="bi bi-chevron-left"></i> Anterior
+                    </a>
+                </li>
+                
+                <!-- Números de página -->
+                @{
+                    int currentPage = ViewData["CurrentPage"] as int? ?? 1;
+                    int totalPages = ViewData["TotalPages"] as int? ?? 1;
+                    int startPage = Math.Max(1, currentPage - 2);
+                    int endPage = Math.Min(totalPages, currentPage + 2);
+                }
+                
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">
+                            @i
+                        </a>
+                    </li>
+                }
+                
+                <!-- Botón Página Siguiente -->
+                <li class="page-item @(ViewData["HasNextPage"] as bool? == true ? "" : "disabled")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@ViewData["NextPageNumber"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">
+                        Siguiente <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                
+                <!-- Botón Última Página -->
+                <li class="page-item @(ViewData["HasNextPage"] as bool? == true ? "" : "disabled")">
+                    <a class="page-link" asp-action="Index" asp-route-pageNumber="@ViewData["TotalPages"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["PageSize"]">
+                        Última <i class="bi bi-chevron-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>
+
+@* Para usar los íconos de Bootstrap (bi), puedes añadir este CSS en tu _Layout.cshtml si aún no lo tienes *@
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+}

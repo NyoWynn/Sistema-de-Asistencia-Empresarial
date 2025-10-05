@@ -1,0 +1,131 @@
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sistema de Asistencia</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+</head>
+<body class="modern-layout">
+    <!-- Header Moderno -->
+    <header class="modern-header">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <!-- Logo y Brand -->
+                <a class="navbar-brand modern-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-clock me-2"></i>
+                    <span class="brand-text">SistemaAsistencia</span>
+                </a>
+                
+                <!-- Toggle Button -->
+                <button class="navbar-toggler modern-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Navigation Menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        @if (Context.Session.GetString("UserID") != null)
+                        {
+                            var isAdmin = Context.Session.GetString("IsAdmin") == "True";
+                            if (isAdmin)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link modern-nav-link" asp-controller="Admin" asp-action="Index">
+                                        <i class="fas fa-user-cog me-1"></i>Usuarios
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link modern-nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-chart-bar me-1"></i>Reportes
+                                    </a>
+                                    <ul class="dropdown-menu modern-dropdown">
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="MonthlyReport"><i class="fas fa-calendar-alt me-2"></i>Reporte Mensual</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="LateArrivalsReport"><i class="fas fa-clock me-2"></i>Llegadas Tardías</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="EarlyDeparturesReport"><i class="fas fa-arrow-right me-2"></i>Salidas Tempranas</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="AbsenceReport"><i class="fas fa-user-times me-2"></i>Ausencias</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link modern-nav-link" asp-controller="Admin" asp-action="CompanySettings">
+                                        <i class="fas fa-cog me-1"></i>Configuración
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link modern-nav-link" asp-controller="Attendance" asp-action="Index">
+                                        <i class="fas fa-clock me-1"></i>Marcar Asistencia
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    
+                    <!-- User Info y Logout -->
+                    <ul class="navbar-nav">
+                        @if (Context.Session.GetString("UserID") != null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link modern-user-dropdown dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="user-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="user-info ms-2">
+                                        <div class="user-name">@Context.Session.GetString("UserName")</div>
+                                        <div class="user-role">@(Context.Session.GetString("IsAdmin") == "True" ? "Administrador" : "Empleado")</div>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu modern-dropdown dropdown-menu-end">
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Dashboard"><i class="fas fa-tachometer-alt me-2"></i>Mi Panel</a></li>
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Profile"><i class="fas fa-user me-2"></i>Mi Perfil</a></li>
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="AttendanceHistory"><i class="fas fa-history me-2"></i>Mi Asistencia</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="modern-main">
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- Footer Moderno -->
+    <footer class="modern-footer">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="footer-brand">
+                        <i class="fas fa-clock me-2"></i>
+                        <span>Sistema de Asistencia</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="footer-info">
+                        <span>&copy; 2025 SistemaAsistencia. Todos los derechos reservados.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

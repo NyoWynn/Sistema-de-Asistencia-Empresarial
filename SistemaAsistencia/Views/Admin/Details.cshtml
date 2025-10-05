@@ -1,0 +1,130 @@
+﻿@model SistemaAsistencia.Models.User
+
+@{
+    ViewData["Title"] = "Detalles del Usuario";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient-info text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-user-circle me-2"></i>
+                            Detalles del Usuario: @Model.Name
+                        </h4>
+                        <a asp-action="Index" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Volver al Listado
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <dl class="row">
+                                <dt class="col-sm-4">
+                                    <i class="fas fa-user me-2"></i>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge bg-primary fs-6">@Html.DisplayFor(model => model.Name)</span>
+                                </dd>
+                                
+                                <dt class="col-sm-4">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    <a href="mailto:@Model.Email" class="text-decoration-none">
+                                        @Html.DisplayFor(model => model.Email)
+                                    </a>
+                                </dd>
+                                
+                                
+                                <dt class="col-sm-4">
+                                    <i class="fas fa-user-shield me-2"></i>
+                                    Tipo de Usuario
+                                </dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.IsAdmin)
+                                    {
+                                        <span class="badge bg-danger fs-6">
+                                            <i class="fas fa-crown me-1"></i>
+                                            Administrador
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info fs-6">
+                                            <i class="fas fa-user me-1"></i>
+                                            Usuario Regular
+                                        </span>
+                                    }
+                                </dd>
+                                
+                                <dt class="col-sm-4">
+                                    <i class="fas fa-qrcode me-2"></i>
+                                    Código QR
+                                </dt>
+                                <dd class="col-sm-8">
+                                    <div class="d-flex align-items-center">
+                                        <code class="bg-light p-2 rounded me-2">@Model.QrCode</code>
+                                        <a asp-action="ShowQr" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye me-1"></i>
+                                            Ver QR
+                                        </a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-user-circle fa-5x text-muted"></i>
+                                </div>
+                                <h5>@Model.Name</h5>
+                                <p class="text-muted">@Model.Email</p>
+                                @if (Model.IsAdmin)
+                                {
+                                    <span class="badge bg-danger fs-6">
+                                        <i class="fas fa-crown me-1"></i>
+                                        Administrador
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info fs-6">
+                                        <i class="fas fa-user me-1"></i>
+                                        Usuario Regular
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a asp-action="Index" class="btn btn-secondary me-md-2">
+                                    <i class="fas fa-arrow-left me-1"></i>
+                                    Volver al Listado
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning me-md-2">
+                                    <i class="fas fa-edit me-1"></i>
+                                    Editar Usuario
+                                </a>
+                                <a asp-action="ShowQr" asp-route-id="@Model?.Id" class="btn btn-info">
+                                    <i class="fas fa-qrcode me-1"></i>
+                                    Ver Código QR
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

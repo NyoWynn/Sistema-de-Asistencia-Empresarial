@@ -1,0 +1,233 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            max-width: 400px;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            background-color: #fff;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2 class="text-center mb-4">Registro de Asistencia</h2>
+
+        <ul class="nav nav-tabs mb-4" id="loginTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="credentials-tab" data-bs-toggle="tab" data-bs-target="#credentials" type="button" role="tab">
+                    <i class="fas fa-key"></i> Credenciales
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="qr-tab" data-bs-toggle="tab" data-bs-target="#qr" type="button" role="tab">
+                    <i class="fas fa-qrcode"></i> Código QR
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="loginTabContent">
+            <div class="tab-pane fade" id="credentials" role="tabpanel">
+                <form asp-action="Login" method="post">
+                    <div class="form-floating mb-3">
+                        <input type="email" name="email" class="form-control" id="floatingInput" placeholder="nombre@ejemplo.com" required>
+                        <label for="floatingInput">Correo Electrónico</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña" required>
+                        <label for="floatingPassword">Contraseña</label>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Ingresar</button>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger mt-3">@ViewBag.Error</div>
+                    }
+                </form>
+            </div>
+
+            <div class="tab-pane fade show active" id="qr" role="tabpanel">
+                <div class="text-center">
+                    <div id="qr-scanner" class="mb-3 position-relative">
+                        <video id="video" width="300" height="200" style="border: 1px solid #ddd; border-radius: 8px;"></video>
+                        <canvas id="canvas" style="display: none;"></canvas>
+                        <div id="scanning-overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <div class="text-white">
+                                <i class="fas fa-qrcode fa-2x mb-2"></i>
+                                <div>Escaneando...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="qr-result" class="alert alert-info" style="display: none;"></div>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i>
+                            Asegúrate de que el código QR esté bien iluminado y centrado en la cámara
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script>
+        let stream = null;
+        let scanning = false;
+        let scanInterval = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicia el escaneo solo si la pestaña QR está activa
+            if (document.getElementById('qr-tab').classList.contains('active')) {
+                startScan();
+            }
+        });
+
+        // Inicia el escaneo cuando se muestra la pestaña QR
+        document.getElementById('qr-tab').addEventListener('click', function() {
+            if (!scanning) {
+                startScan();
+            }
+        });
+
+        async function startScan() {
+            try {
+                const video = document.getElementById('video');
+                const canvas = document.getElementById('canvas');
+                const resultDiv = document.getElementById('qr-result');
+
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    }
+                });
+
+                video.srcObject = stream;
+                video.play();
+
+                video.addEventListener('loadedmetadata', function() {
+                    startQRScanning();
+                });
+
+            } catch (error) {
+                console.error('Error al acceder a la cámara:', error);
+                document.getElementById('qr-result').innerHTML = 'Error al acceder a la cámara: ' + error.message;
+                document.getElementById('qr-result').className = 'alert alert-danger';
+                document.getElementById('qr-result').style.display = 'block';
+            }
+        }
+
+        function startQRScanning() {
+            scanning = true;
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            const overlay = document.getElementById('scanning-overlay');
+
+            overlay.style.display = 'flex';
+
+            scanInterval = setInterval(() => {
+                if (!scanning) return;
+
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                if (code) {
+                    console.log('QR detectado:', code.data);
+                    handleQRResult(code.data);
+                }
+            }, 100);
+        }
+
+        function handleQRResult(qrData) {
+            const resultDiv = document.getElementById('qr-result');
+            resultDiv.innerHTML = 'Código QR detectado: ' + qrData;
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'alert alert-info';
+
+            fetch('/Account/LoginWithQr', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'qrData=' + encodeURIComponent(qrData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resultDiv.innerHTML = '¡Login exitoso! Redirigiendo...';
+                    resultDiv.className = 'alert alert-success';
+                    setTimeout(() => {
+                        window.location.href = data.redirectUrl;
+                    }, 1000);
+                } else {
+                    resultDiv.innerHTML = 'Error: ' + data.message;
+                    resultDiv.className = 'alert alert-danger';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = 'Error al procesar el código QR';
+                resultDiv.className = 'alert alert-danger';
+            });
+
+            stopScan();
+        }
+
+        function stopScan() {
+            scanning = false;
+            if (scanInterval) {
+                clearInterval(scanInterval);
+                scanInterval = null;
+            }
+
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+
+            const video = document.getElementById('video');
+            video.srcObject = null;
+
+            const overlay = document.getElementById('scanning-overlay');
+            overlay.style.display = 'none';
+
+            document.getElementById('qr-result').style.display = 'none';
+        }
+
+        document.getElementById('credentials-tab').addEventListener('click', function() {
+            if (scanning) {
+                stopScan();
+            }
+        });
+    </script>
+</body>
+</html>

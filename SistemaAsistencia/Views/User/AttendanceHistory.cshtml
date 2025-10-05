@@ -1,0 +1,241 @@
+@model IEnumerable<SistemaAsistencia.Models.AttendanceRecord>
+
+@{
+    ViewData["Title"] = "Historial de Asistencia";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient-success text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-history me-2"></i>
+                            Mi Historial de Asistencia
+                        </h4>
+                        <a asp-action="Dashboard" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Volver al Panel
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    @if (Model != null && Model.Any())
+                    {
+                        <!-- Filtros y búsqueda -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="searchInput" placeholder="Buscar por fecha o tipo...">
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-primary" onclick="filterRecords('all')">
+                                        <i class="fas fa-list me-1"></i>
+                                        Todos
+                                    </button>
+                                    <button type="button" class="btn btn-outline-success" onclick="filterRecords('Entrada')">
+                                        <i class="fas fa-sign-in-alt me-1"></i>
+                                        Entradas
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger" onclick="filterRecords('Salida')">
+                                        <i class="fas fa-sign-out-alt me-1"></i>
+                                        Salidas
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabla de registros -->
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="attendanceTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>
+                                            <i class="fas fa-calendar me-1"></i>
+                                            Fecha
+                                        </th>
+                                        <th>
+                                            <i class="fas fa-clock me-1"></i>
+                                            Hora
+                                        </th>
+                                        <th>
+                                            <i class="fas fa-tag me-1"></i>
+                                            Tipo
+                                        </th>
+                                        <th>
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Estado
+                                        </th>
+                                        <th>
+                                            <i class="fas fa-calendar-week me-1"></i>
+                                            Día de la Semana
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var record in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="fw-bold">@record.Timestamp.ToString("dd/MM/yyyy")</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark fs-6">
+                                                    @record.Timestamp.ToString("HH:mm:ss")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if (record.RecordType == "Entrada")
+                                                {
+                                                    <span class="badge bg-success fs-6">
+                                                        <i class="fas fa-sign-in-alt me-1"></i>
+                                                        Entrada
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger fs-6">
+                                                        <i class="fas fa-sign-out-alt me-1"></i>
+                                                        Salida
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">
+                                                    <i class="fas fa-check-circle me-1"></i>
+                                                    Registrado
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted">
+                                                    @record.Timestamp.ToString("dddd", new System.Globalization.CultureInfo("es-ES"))
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Paginación -->
+                        @if (ViewData["TotalPages"] != null && (int)ViewData["TotalPages"] > 1)
+                        {
+                            <nav aria-label="Paginación del historial">
+                                <ul class="pagination justify-content-center">
+                                    @if ((bool)ViewData["HasPreviousPage"])
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" asp-action="AttendanceHistory" asp-route-pageNumber="@ViewData["PreviousPageNumber"]">
+                                                <i class="fas fa-chevron-left me-1"></i>
+                                                Anterior
+                                            </a>
+                                        </li>
+                                    }
+                                    
+                                    @for (int i = 1; i <= (int)ViewData["TotalPages"]; i++)
+                                    {
+                                        <li class="page-item @(i == (int)ViewData["CurrentPage"] ? "active" : "")">
+                                            <a class="page-link" asp-action="AttendanceHistory" asp-route-pageNumber="@i">@i</a>
+                                        </li>
+                                    }
+                                    
+                                    @if ((bool)ViewData["HasNextPage"])
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" asp-action="AttendanceHistory" asp-route-pageNumber="@ViewData["NextPageNumber"]">
+                                                Siguiente
+                                                <i class="fas fa-chevron-right ms-1"></i>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        }
+
+                        <!-- Información de paginación -->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p class="text-muted">
+                                    Mostrando registros del historial de asistencia
+                                </p>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <p class="text-muted">
+                                    Total de registros: <strong>@ViewData["TotalRecords"]</strong>
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-clipboard-list fa-4x text-muted mb-4"></i>
+                            <h4 class="text-muted">No hay registros de asistencia</h4>
+                            <p class="text-muted">Tus registros de asistencia aparecerán aquí cuando comiences a marcar entrada y salida</p>
+                            <a asp-controller="Attendance" asp-action="Index" class="btn btn-primary">
+                                <i class="fas fa-qrcode me-2"></i>
+                                Marcar Asistencia
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Filtrado de registros
+        function filterRecords(type) {
+            const table = document.getElementById('attendanceTable');
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const typeCell = row.cells[2].textContent.trim();
+                
+                if (type === 'all' || typeCell.includes(type)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // Búsqueda en tiempo real
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const table = document.getElementById('attendanceTable');
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const text = row.textContent.toLowerCase();
+                
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+    </script>
+}
+
+
+
+
+
