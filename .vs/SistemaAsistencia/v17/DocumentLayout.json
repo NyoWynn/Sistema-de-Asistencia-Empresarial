@@ -1,0 +1,401 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\models\\companysettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\models\\companysettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\models\\monthlyreportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\models\\monthlyreportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\models\\attendancerecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\models\\attendancerecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\models\\manualrecordviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\models\\manualrecordviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\models\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\models\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\controllers\\attendancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\controllers\\attendancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\admin\\monthlyreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\admin\\monthlyreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\admin\\manualrecord.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\admin\\manualrecord.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\attendance\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\attendance\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\admin\\absencereport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\admin\\absencereport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\admin\\earlydeparturesreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\admin\\earlydeparturesreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\views\\admin\\latearrivalsreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\views\\admin\\latearrivalsreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|c:\\users\\ncamp\\source\\repos\\sistemaasistencia\\sistemaasistencia\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A0CF77EE-29A7-477B-9184-531D1683A3A5}|SistemaAsistencia\\SistemaAsistencia.csproj|solutionrelative:sistemaasistencia\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ManualRecordViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\ManualRecordViewModel.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Models\\ManualRecordViewModel.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\ManualRecordViewModel.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Models\\ManualRecordViewModel.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAzwBsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T04:46:32.643Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\README.md",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\README.md",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\README.md",
+              "RelativeToolTip": "SistemaAsistencia\\README.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-09-07T19:45:14.954Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAL8AAAAAAAAAAAAuwOgAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-31T03:51:13.277Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AttendanceController.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Controllers\\AttendanceController.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Controllers\\AttendanceController.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Controllers\\AttendanceController.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Controllers\\AttendanceController.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAgwFoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T03:47:35.672Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CompanySettings.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\CompanySettings.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Models\\CompanySettings.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\CompanySettings.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Models\\CompanySettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-07T19:45:35.886Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAwwAEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T03:46:30.587Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Program.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Program.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Program.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Program.cs",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAWwGAAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T03:26:14.941Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\appsettings.json",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\appsettings.json",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\appsettings.json",
+              "RelativeToolTip": "SistemaAsistencia\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-31T03:14:51.212Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AttendanceRecord.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\AttendanceRecord.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Models\\AttendanceRecord.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\AttendanceRecord.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Models\\AttendanceRecord.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAzwBIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T03:14:11.796Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "MonthlyReportViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\MonthlyReportViewModel.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Models\\MonthlyReportViewModel.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\MonthlyReportViewModel.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Models\\MonthlyReportViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T04:57:19.678Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Models\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\ApplicationDbContext.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Models\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T03:14:28.469Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-07T19:47:17.243Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQBAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T03:31:42.871Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\Index.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Admin\\Index.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\Index.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Admin\\Index.cshtml",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAAAAAAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-31T04:00:17.457Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAABoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-31T03:52:39.358Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-03T21:37:17.377Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ManualRecord.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\ManualRecord.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Admin\\ManualRecord.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\ManualRecord.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Admin\\ManualRecord.cshtml",
+              "ViewState": "AgIAABEAAAAAAAAAAAAiwDkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-31T04:49:21.514Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "MonthlyReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\MonthlyReport.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Admin\\MonthlyReport.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\MonthlyReport.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Admin\\MonthlyReport.cshtml",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAiwFYAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-31T04:58:34.599Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AbsenceReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\AbsenceReport.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Admin\\AbsenceReport.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\AbsenceReport.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Admin\\AbsenceReport.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-31T04:30:18.871Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Attendance\\Index.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Attendance\\Index.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Attendance\\Index.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Attendance\\Index.cshtml",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAuwC0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-31T03:51:43.084Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "LateArrivalsReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\LateArrivalsReport.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Admin\\LateArrivalsReport.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\LateArrivalsReport.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Admin\\LateArrivalsReport.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-31T04:29:40.372Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "EarlyDeparturesReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\EarlyDeparturesReport.cshtml",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Views\\Admin\\EarlyDeparturesReport.cshtml",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Views\\Admin\\EarlyDeparturesReport.cshtml",
+              "RelativeToolTip": "SistemaAsistencia\\Views\\Admin\\EarlyDeparturesReport.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-08-31T04:30:00.889Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\User.cs",
+              "RelativeDocumentMoniker": "SistemaAsistencia\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\ncamp\\source\\repos\\SistemaAsistencia\\SistemaAsistencia\\Models\\User.cs",
+              "RelativeToolTip": "SistemaAsistencia\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-31T03:13:54.657Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

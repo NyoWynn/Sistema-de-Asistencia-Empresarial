@@ -1,0 +1,130 @@
+﻿@model SistemaAsistencia.Models.ManualRecordViewModel
+
+@{
+    ViewData["Title"] = "Registro Manual de Asistencia";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h4>Aquí puede añadir o modificar un registro para un empleado en una fecha específica.</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="ManualRecord">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="UserId" class="form-label"></label>
+                <div class="position-relative">
+                    <input type="text" id="userSearch" class="form-control" placeholder="Buscar empleado por nombre..." autocomplete="off" />
+                    <input type="hidden" asp-for="UserId" id="selectedUserId" />
+                    <div id="searchResults" class="list-group position-absolute w-100" style="display: none; z-index: 1000; max-height: 200px; overflow-y: auto; top: 100%; left: 0; border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);">
+                        <!-- Los resultados se cargarán aquí -->
+                    </div>
+                </div>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+                <div class="form-text">Escriba el nombre del empleado para buscarlo</div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Date" class="form-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+            <p class="form-text">
+                Deje los campos de hora en blanco para marcar al empleado como <strong>ausente</strong> en la fecha seleccionada.
+            </p>
+
+            <div class="mb-3">
+                <label asp-for="ClockInTime" class="form-label"></label>
+                <input asp-for="ClockInTime" class="form-control" />
+                <span asp-validation-for="ClockInTime" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ClockOutTime" class="form-label"></label>
+                <input asp-for="ClockOutTime" class="form-control" />
+                <span asp-validation-for="ClockOutTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Guardar Registro</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userSearch = document.getElementById('userSearch');
+            const searchResults = document.getElementById('searchResults');
+            const selectedUserId = document.getElementById('selectedUserId');
+            let searchTimeout;
+
+            userSearch.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                clearTimeout(searchTimeout);
+                
+                if (query.length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                searchTimeout = setTimeout(() => {
+                    searchUsers(query);
+                }, 300);
+            });
+
+            // Ocultar resultados al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.position-relative')) {
+                    searchResults.style.display = 'none';
+                }
+            });
+
+            async function searchUsers(query) {
+                try {
+                    const response = await fetch(`@Url.Action("SearchUsers")?query=${encodeURIComponent(query)}`);
+                    const users = await response.json();
+                    
+                    if (users.length === 0) {
+                        searchResults.innerHTML = '<div class="list-group-item text-muted">No se encontraron empleados</div>';
+                    } else {
+                        searchResults.innerHTML = users.map(user => 
+                            `<div class="list-group-item list-group-item-action" data-user-id="${user.id}" data-user-name="${user.name}" style="cursor: pointer;">
+                                <strong>${user.name}</strong><br>
+                                <small class="text-muted">${user.email}</small>
+                            </div>`
+                        ).join('');
+                    }
+                    
+                    searchResults.style.display = 'block';
+                    
+                    // Agregar event listeners a los elementos
+                    searchResults.querySelectorAll('[data-user-id]').forEach(item => {
+                        item.addEventListener('click', function() {
+                            const userId = this.getAttribute('data-user-id');
+                            const userName = this.getAttribute('data-user-name');
+                            
+                            selectedUserId.value = userId;
+                            userSearch.value = userName;
+                            searchResults.style.display = 'none';
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error al buscar usuarios:', error);
+                    searchResults.innerHTML = '<div class="list-group-item text-danger">Error al buscar empleados</div>';
+                    searchResults.style.display = 'block';
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,184 @@
+@model SistemaAsistencia.Models.User
+
+@{
+    ViewData["Title"] = "Mi Perfil";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient-info text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-user-circle me-2"></i>
+                            Mi Perfil
+                        </h4>
+                        <a asp-action="Dashboard" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Volver al Panel
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <!-- Información del usuario -->
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="text-center mb-4">
+                                        <div class="mb-3">
+                                            <i class="fas fa-user-circle fa-5x text-muted"></i>
+                                        </div>
+                                        <h5>@Model.Name</h5>
+                                        <p class="text-muted">@Model.Email</p>
+                                        @if (Model.IsAdmin)
+                                        {
+                                            <span class="badge bg-danger fs-6">
+                                                <i class="fas fa-crown me-1"></i>
+                                                Administrador
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info fs-6">
+                                                <i class="fas fa-user me-1"></i>
+                                                Usuario Regular
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-8">
+                                    <dl class="row">
+                                        <dt class="col-sm-4">
+                                            <i class="fas fa-user me-2"></i>
+                                            Nombre Completo
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            <span class="badge bg-primary fs-6">@Model.Name</span>
+                                        </dd>
+                                        
+                                        <dt class="col-sm-4">
+                                            <i class="fas fa-envelope me-2"></i>
+                                            Correo Electrónico
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            <a href="mailto:@Model.Email" class="text-decoration-none">
+                                                @Model.Email
+                                            </a>
+                                        </dd>
+                                        
+                                        <dt class="col-sm-4">
+                                            <i class="fas fa-qrcode me-2"></i>
+                                            Código QR
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            <div class="d-flex align-items-center">
+                                                <code class="bg-light p-2 rounded me-2">@Model.QrCode</code>
+                                                <a asp-controller="Admin" asp-action="ShowQr" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-eye me-1"></i>
+                                                    Ver QR
+                                                </a>
+                                            </div>
+                                        </dd>
+                                        
+                                        <dt class="col-sm-4">
+                                            <i class="fas fa-user-shield me-2"></i>
+                                            Tipo de Usuario
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @if (Model.IsAdmin)
+                                            {
+                                                <span class="badge bg-danger fs-6">
+                                                    <i class="fas fa-crown me-1"></i>
+                                                    Administrador
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-info fs-6">
+                                                    <i class="fas fa-user me-1"></i>
+                                                    Usuario Regular
+                                                </span>
+                                            }
+                                        </dd>
+                                        
+                                        <dt class="col-sm-4">
+                                            <i class="fas fa-calendar-alt me-2"></i>
+                                            Miembro desde
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            <span class="text-muted">@DateTime.Now.ToString("MMMM yyyy")</span>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Acciones -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-cog me-2"></i>
+                                        Acciones
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <a asp-action="ChangePassword" class="btn btn-warning">
+                                            <i class="fas fa-key me-2"></i>
+                                            Cambiar Contraseña
+                                        </a>
+                                        <a asp-action="Dashboard" class="btn btn-primary">
+                                            <i class="fas fa-tachometer-alt me-2"></i>
+                                            Ir al Panel
+                                        </a>
+                                        <a asp-action="AttendanceHistory" class="btn btn-info">
+                                            <i class="fas fa-history me-2"></i>
+                                            Ver Historial
+                                        </a>
+                                        <a asp-controller="Attendance" asp-action="Index" class="btn btn-success">
+                                            <i class="fas fa-qrcode me-2"></i>
+                                            Marcar Asistencia
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Información adicional -->
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Información del Sistema
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <strong>Estado de la cuenta:</strong><br>
+                                        <span class="badge bg-success">Activa</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Último acceso:</strong><br>
+                                        <small class="text-muted">@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</small>
+                                    </div>
+                                    <div class="mb-0">
+                                        <strong>ID de usuario:</strong><br>
+                                        <code class="small">#@Model.Id</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

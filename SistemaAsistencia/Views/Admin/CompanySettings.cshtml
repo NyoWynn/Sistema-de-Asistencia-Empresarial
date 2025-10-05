@@ -1,0 +1,175 @@
+@model SistemaAsistencia.Models.CompanySettings
+@using SistemaAsistencia.Models
+
+@{
+    ViewData["Title"] = "Configuración de Empresa";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Configuración de Empresa</h2>
+            <p class="text-muted">Configure los horarios y parámetros de la empresa para el sistema de asistencia.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Parámetros de Horarios</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CompanySettings" method="post">
+                        <div class="mb-3">
+                            <label asp-for="CompanyName" class="form-label"></label>
+                            <input asp-for="CompanyName" class="form-control" placeholder="Nombre de la empresa" />
+                            <span asp-validation-for="CompanyName" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="StartTime" class="form-label"></label>
+                                <input asp-for="StartTime" class="form-control" type="time" />
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                                <div class="form-text">Hora de inicio de la jornada laboral</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EndTime" class="form-label"></label>
+                                <input asp-for="EndTime" class="form-control" type="time" />
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                                <div class="form-text">Hora de fin de la jornada laboral</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LateArrivalTolerance" class="form-label"></label>
+                                <input asp-for="LateArrivalTolerance" class="form-control" type="number" min="0" max="60" />
+                                <span asp-validation-for="LateArrivalTolerance" class="text-danger"></span>
+                                <div class="form-text">Minutos de tolerancia para llegadas tardes</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EarlyDepartureTolerance" class="form-label"></label>
+                                <input asp-for="EarlyDepartureTolerance" class="form-control" type="number" min="0" max="60" />
+                                <span asp-validation-for="EarlyDepartureTolerance" class="text-danger"></span>
+                                <div class="form-text">Minutos de tolerancia para salidas tempranas</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="WorkingDays" class="form-label"></label>
+                            <input asp-for="WorkingDays" class="form-control" placeholder="Lunes,Martes,Miércoles,Jueves,Viernes" />
+                            <span asp-validation-for="WorkingDays" class="text-danger"></span>
+                            <div class="form-text">Días de trabajo separados por comas</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("Index")" class="btn btn-secondary">Volver al Panel</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-building"></i> Guardar Configuración de Empresa
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sección de Configuración de Email -->
+            @{
+                var emailSettings = new EmailSettingsViewModel
+                {
+                    EmailEnabled = Model.EmailEnabled,
+                    SmtpServer = Model.SmtpServer,
+                    SmtpPort = Model.SmtpPort,
+                    EmailUsername = Model.EmailUsername,
+                    EmailPassword = Model.EmailPassword,
+                    FromEmail = Model.FromEmail,
+                    FromName = Model.FromName,
+                    WelcomeEmailTemplate = Model.WelcomeEmailTemplate,
+                    AttendanceEmailTemplate = Model.AttendanceEmailTemplate
+                };
+            }
+            @await Html.PartialAsync("_EmailSettingsPartial", emailSettings)
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6>Información Actual</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model != null && !string.IsNullOrEmpty(Model.CompanyName))
+                    {
+                        <p><strong>Empresa:</strong> @Model.CompanyName</p>
+                        <p><strong>Horario:</strong> @Model.StartTime.ToString(@"hh\:mm") - @Model.EndTime.ToString(@"hh\:mm")</p>
+                        <p><strong>Tolerancia Llegada:</strong> @Model.LateArrivalTolerance minutos</p>
+                        <p><strong>Tolerancia Salida:</strong> @Model.EarlyDepartureTolerance minutos</p>
+                        <p><strong>Días de Trabajo:</strong> @Model.WorkingDays</p>
+                        <p><strong>Email Habilitado:</strong> 
+                            @if (Model.EmailEnabled)
+                            {
+                                <span class="badge bg-success">Sí</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">No</span>
+                            }
+                        </p>
+                        @if (Model.EmailEnabled && !string.IsNullOrEmpty(Model.SmtpServer))
+                        {
+                            <p><strong>Servidor SMTP:</strong> @Model.SmtpServer:@Model.SmtpPort</p>
+                            <p><strong>Email de Envío:</strong> @Model.FromEmail</p>
+                        }
+                        <hr>
+                        <small class="text-muted">
+                            Última actualización: @Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm")
+                        </small>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay configuración establecida.</p>
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6>Ayuda</h6>
+                </div>
+                <div class="card-body">
+                    <small class="text-muted">
+                        <strong>Horarios:</strong> Establezca las horas de inicio y fin de la jornada laboral.<br><br>
+                        <strong>Tolerancias:</strong> Defina cuántos minutos de retraso o salida temprana se permiten antes de marcar como tardanza.<br><br>
+                        <strong>Días de Trabajo:</strong> Especifique qué días de la semana son laborales.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailEnabledCheckbox = document.getElementById('emailEnabled');
+            const emailConfigDiv = document.getElementById('emailConfig');
+            
+            // Función para mostrar/ocultar configuración de email
+            function toggleEmailConfig() {
+                if (emailEnabledCheckbox.checked) {
+                    emailConfigDiv.style.display = 'block';
+                } else {
+                    emailConfigDiv.style.display = 'none';
+                }
+            }
+            
+            // Event listener para el checkbox
+            emailEnabledCheckbox.addEventListener('change', toggleEmailConfig);
+            
+            // Mostrar configuración si ya está habilitada
+            toggleEmailConfig();
+        });
+    </script>
+}

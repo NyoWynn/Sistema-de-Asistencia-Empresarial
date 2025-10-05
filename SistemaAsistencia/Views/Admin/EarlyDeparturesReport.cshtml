@@ -1,0 +1,115 @@
+﻿@model IEnumerable<SistemaAsistencia.Models.AttendanceRecord>
+@{
+    ViewData["Title"] = "Reporte de Salidas Anticipadas";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>@ViewData["Title"]</h1>
+    <div class="text-muted">
+        <small>Mostrando @(((ViewData["CurrentPage"] as int? ?? 1) - 1) * (ViewData["PageSize"] as int? ?? 20) + 1) - @Math.Min((ViewData["CurrentPage"] as int? ?? 1) * (ViewData["PageSize"] as int? ?? 20), ViewData["TotalRecords"] as int? ?? 0) de @ViewData["TotalRecords"] registros</small>
+    </div>
+</div>
+<hr />
+
+@if (Model.Any())
+{
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Empleado</th>
+                <th>Fecha</th>
+                <th>Hora de Salida</th>
+                <th>Antelación</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(item.User?.Name ?? "N/A")</td>
+                    <td>@item.Timestamp.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Timestamp.ToString("HH:mm:ss")</td>
+                    <td>
+                        @{
+                            var companySettings = ViewBag.CompanySettings as SistemaAsistencia.Models.CompanySettings;
+                            var earlyTime = companySettings?.EndTime.Subtract(TimeSpan.FromMinutes(companySettings?.EarlyDepartureTolerance ?? 15)) ?? new TimeSpan(17, 30, 0);
+                            var earlyDeparture = earlyTime - item.Timestamp.TimeOfDay;
+                            var earlyMinutes = (int)earlyDeparture.TotalMinutes;
+                        }
+                        <span class="badge bg-info">@earlyMinutes minutos</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+    <!-- Controles de Paginación -->
+    @if (ViewData["TotalPages"] as int? > 1)
+    {
+        <nav aria-label="Paginación de reporte" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <!-- Botón Primera Página -->
+                <li class="page-item @(ViewData["HasPreviousPage"] as bool? == true ? "" : "disabled")">
+                    <a class="page-link" asp-action="EarlyDeparturesReport" asp-route-pageNumber="1" asp-route-pageSize="@ViewData["PageSize"]">
+                        <i class="bi bi-chevron-double-left"></i> Primera
+                    </a>
+                </li>
+                
+                <!-- Botón Página Anterior -->
+                <li class="page-item @(ViewData["HasPreviousPage"] as bool? == true ? "" : "disabled")">
+                    <a class="page-link" asp-action="EarlyDeparturesReport" asp-route-pageNumber="@ViewData["PreviousPageNumber"]" asp-route-pageSize="@ViewData["PageSize"]">
+                        <i class="bi bi-chevron-left"></i> Anterior
+                    </a>
+                </li>
+                
+                <!-- Números de página -->
+                @{
+                    int currentPage = ViewData["CurrentPage"] as int? ?? 1;
+                    int totalPages = ViewData["TotalPages"] as int? ?? 1;
+                    int startPage = Math.Max(1, currentPage - 2);
+                    int endPage = Math.Min(totalPages, currentPage + 2);
+                }
+                
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" asp-action="EarlyDeparturesReport" asp-route-pageNumber="@i" asp-route-pageSize="@ViewData["PageSize"]">
+                            @i
+                        </a>
+                    </li>
+                }
+                
+                <!-- Botón Página Siguiente -->
+                <li class="page-item @(ViewData["HasNextPage"] as bool? == true ? "" : "disabled")">
+                    <a class="page-link" asp-action="EarlyDeparturesReport" asp-route-pageNumber="@ViewData["NextPageNumber"]" asp-route-pageSize="@ViewData["PageSize"]">
+                        Siguiente <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                
+                <!-- Botón Última Página -->
+                <li class="page-item @(ViewData["HasNextPage"] as bool? == true ? "" : "disabled")">
+                    <a class="page-link" asp-action="EarlyDeparturesReport" asp-route-pageNumber="@ViewData["TotalPages"]" asp-route-pageSize="@ViewData["PageSize"]">
+                        Última <i class="bi bi-chevron-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+}
+else
+{
+    <div class="alert alert-info text-center">
+        <h4><i class="bi bi-info-circle me-2"></i>No hay registros de salidas anticipadas</h4>
+        <p class="mb-0">¡Excelente! Todos los empleados han cumplido con su horario de salida.</p>
+    </div>
+}
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Volver al Panel
+    </a>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+}
