@@ -391,15 +391,6 @@ Las contribuciones son bienvenidas. Para contribuir:
 ## 📝 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
-## 📞 Soporte
-
-Para soporte técnico o preguntas:
-- 📧 Email: soporte@sistemaasistencia.com
-- 📱 Issues: [GitHub Issues](https://github.com/tu-usuario/sistema-asistencia/issues)
-- 📖 Documentación: [Wiki del Proyecto](https://github.com/tu-usuario/sistema-asistencia/wiki)
-
 ---
 
 
-*Sistema de Asistencia Empresarial - La solución completa para el control de asistencia de tu empresa*
