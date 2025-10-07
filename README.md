@@ -354,7 +354,7 @@ ENTRYPOINT ["dotnet", "SistemaAsistencia.dll"]
 
 ## 🔄 Historial de Versiones
 
-### v3.0.0 (2024-12-XX) - Sistema Completo con Email
+### v3.0.0 (2025-10-XX) - Sistema Completo con Email
 - ✨ **NUEVO**: Sistema completo de notificaciones por email
 - ✨ **NUEVO**: Plantillas de email personalizables
 - ✨ **NUEVO**: Configuración SMTP avanzada
@@ -365,14 +365,14 @@ ENTRYPOINT ["dotnet", "SistemaAsistencia.dll"]
 - 🔧 Mejoras en la interfaz de usuario
 - 🔧 Optimizaciones de rendimiento
 
-### v2.0.0 (2024-XX-XX) - Sistema con Códigos QR
+### v2.0.0 (2025-09-XX) - Sistema con Códigos QR
 - ✨ Sistema de códigos QR para acceso rápido
 - ✨ Generación automática de códigos QR
 - ✨ Login por código QR
 - ✨ Usuario administrador automático
 - ✨ Configuración de empresa personalizable
 
-### v1.0.0 (2024-01-XX) - Versión Base
+### v1.0.0 (2025-08-XX) - Versión Base
 - ✅ Sistema básico de asistencia
 - ✅ Gestión de usuarios
 - ✅ Reportes básicos
@@ -391,15 +391,6 @@ Las contribuciones son bienvenidas. Para contribuir:
 ## 📝 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
-## 📞 Soporte
-
-Para soporte técnico o preguntas:
-- 📧 Email: soporte@sistemaasistencia.com
-- 📱 Issues: [GitHub Issues](https://github.com/tu-usuario/sistema-asistencia/issues)
-- 📖 Documentación: [Wiki del Proyecto](https://github.com/tu-usuario/sistema-asistencia/wiki)
-
 ---
 
 
-*Sistema de Asistencia Empresarial - La solución completa para el control de asistencia de tu empresa*
