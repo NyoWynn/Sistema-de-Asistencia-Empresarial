@@ -26,26 +26,20 @@
     @if (ViewBag.AttendanceStatus == "CanClockIn" || ViewBag.AttendanceStatus == "CanClockOut")
     {
         <!-- Botón de Entrada -->
-        <form asp-action="MarkAttendance" method="post" class="d-inline">
-            @Html.AntiForgeryToken()
-            <button type="submit" name="recordType" value="Entrada" 
-                    class="btn btn-success btn-lg px-4 py-3 attendance-btn @(ViewBag.AttendanceStatus == "CanClockIn" ? "" : "disabled")"
-                    @(ViewBag.AttendanceStatus == "CanClockOut" ? "disabled" : "")>
-                <i class="fas fa-sign-in-alt me-2"></i>
-                Marcar Entrada
-            </button>
-        </form>
+        <button type="button" id="clockInBtn" 
+                class="btn btn-success btn-lg px-4 py-3 attendance-btn @(ViewBag.AttendanceStatus == "CanClockIn" ? "" : "disabled")"
+                @(ViewBag.AttendanceStatus == "CanClockOut" ? "disabled" : "")>
+            <i class="fas fa-sign-in-alt me-2"></i>
+            Marcar Entrada
+        </button>
 
         <!-- Botón de Salida -->
-        <form asp-action="MarkAttendance" method="post" class="d-inline">
-            @Html.AntiForgeryToken()
-            <button type="submit" name="recordType" value="Salida" 
-                    class="btn btn-danger btn-lg px-4 py-3 attendance-btn @(ViewBag.AttendanceStatus == "CanClockOut" ? "" : "disabled")"
-                    @(ViewBag.AttendanceStatus == "CanClockIn" ? "disabled" : "")>
-                <i class="fas fa-sign-out-alt me-2"></i>
-                Marcar Salida
-            </button>
-        </form>
+        <button type="button" id="clockOutBtn" 
+                class="btn btn-danger btn-lg px-4 py-3 attendance-btn @(ViewBag.AttendanceStatus == "CanClockOut" ? "" : "disabled")"
+                @(ViewBag.AttendanceStatus == "CanClockIn" ? "disabled" : "")>
+            <i class="fas fa-sign-out-alt me-2"></i>
+            Marcar Salida
+        </button>
     }
     else if (ViewBag.AttendanceStatus == "CompletedDay")
     {
@@ -55,6 +49,14 @@
         </div>
     }
 </div>
+
+<!-- Formulario oculto para envío -->
+<form id="attendanceForm" asp-action="MarkAttendance" method="post" style="display: none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="recordType" id="recordTypeInput" />
+    <input type="hidden" name="latitude" id="latitudeInput" />
+    <input type="hidden" name="longitude" id="longitudeInput" />
+</form>
 
 @if (TempData["Message"] != null)
 {
@@ -182,5 +184,117 @@
         // Actualizar el reloj inmediatamente y luego cada segundo
         updateClock();
         setInterval(updateClock, 1000);
+
+        // Funcionalidad GPS para asistencia
+        document.addEventListener('DOMContentLoaded', function() {
+            const clockInBtn = document.getElementById('clockInBtn');
+            const clockOutBtn = document.getElementById('clockOutBtn');
+            const attendanceForm = document.getElementById('attendanceForm');
+            const recordTypeInput = document.getElementById('recordTypeInput');
+            const latitudeInput = document.getElementById('latitudeInput');
+            const longitudeInput = document.getElementById('longitudeInput');
+
+            function getCurrentLocation() {
+                return new Promise((resolve, reject) => {
+                    if (!navigator.geolocation) {
+                        reject(new Error('Geolocalización no es soportada por este navegador.'));
+                        return;
+                    }
+
+                    navigator.geolocation.getCurrentPosition(
+                        position => {
+                            resolve({
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            });
+                        },
+                        error => {
+                            let errorMessage = 'Error al obtener la ubicación: ';
+                            switch(error.code) {
+                                case error.PERMISSION_DENIED:
+                                    errorMessage += 'Permiso denegado por el usuario.';
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    errorMessage += 'Información de ubicación no disponible.';
+                                    break;
+                                case error.TIMEOUT:
+                                    errorMessage += 'Tiempo de espera agotado.';
+                                    break;
+                                default:
+                                    errorMessage += 'Error desconocido.';
+                                    break;
+                            }
+                            reject(new Error(errorMessage));
+                        },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 60000
+                        }
+                    );
+                });
+            }
+
+            function showLocationStatus(message, type = 'info') {
+                // Remover alertas existentes
+                const existingAlert = document.querySelector('.location-alert');
+                if (existingAlert) {
+                    existingAlert.remove();
+                }
+
+                // Crear nueva alerta
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type} location-alert mt-3`;
+                alertDiv.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                    ${message}
+                `;
+
+                // Insertar después de los botones
+                const buttonsContainer = document.querySelector('.d-flex.justify-content-center.gap-4.mt-4');
+                buttonsContainer.parentNode.insertBefore(alertDiv, buttonsContainer.nextSibling);
+            }
+
+            function handleAttendanceClick(recordType) {
+                const button = recordType === 'Entrada' ? clockInBtn : clockOutBtn;
+                const originalText = button.innerHTML;
+                
+                // Deshabilitar botón y mostrar loading
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Obteniendo ubicación...';
+                showLocationStatus('Obteniendo tu ubicación actual...', 'info');
+
+                getCurrentLocation()
+                    .then(location => {
+                        // Mostrar éxito
+                        button.innerHTML = '<i class="fas fa-check me-2"></i>Ubicación obtenida';
+                        showLocationStatus(`Ubicación obtenida: ${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)}`, 'success');
+                        
+                        // Configurar formulario y enviar
+                        recordTypeInput.value = recordType;
+                        latitudeInput.value = location.latitude;
+                        longitudeInput.value = location.longitude;
+                        
+                        setTimeout(() => {
+                            attendanceForm.submit();
+                        }, 1000);
+                    })
+                    .catch(error => {
+                        // Restaurar botón
+                        button.disabled = false;
+                        button.innerHTML = originalText;
+                        showLocationStatus(error.message, 'danger');
+                    });
+            }
+
+            // Event listeners
+            if (clockInBtn) {
+                clockInBtn.addEventListener('click', () => handleAttendanceClick('Entrada'));
+            }
+
+            if (clockOutBtn) {
+                clockOutBtn.addEventListener('click', () => handleAttendanceClick('Salida'));
+            }
+        });
     </script>
 }

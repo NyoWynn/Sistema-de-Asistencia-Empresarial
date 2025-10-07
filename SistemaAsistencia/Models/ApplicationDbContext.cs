@@ -12,6 +12,7 @@ namespace SistemaAsistencia.Models
         public DbSet<User> Users { get; set; }
         public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
         public DbSet<CompanySettings> CompanySettings { get; set; }
+        public DbSet<OfficeLocation> OfficeLocations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

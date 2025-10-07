@@ -1,0 +1,197 @@
+@{
+    ViewData["Title"] = "Configurar Ubicación de Oficina";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="modern-card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        Configurar Ubicación de Oficina
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Instrucciones:</strong> Permite al navegador acceder a tu ubicación para configurar automáticamente las coordenadas de la oficina.
+                    </div>
+
+                    <form id="locationForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Nombre de la Ubicación</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="Oficina Principal" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="radiusMeters" class="form-label">Radio de Tolerancia (metros)</label>
+                                    <input type="number" class="form-control" id="radiusMeters" name="radiusMeters" value="100" min="10" max="1000" required>
+                                    <div class="form-text">Distancia máxima permitida desde la oficina</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Dirección</label>
+                            <textarea class="form-control" id="address" name="address" rows="2" placeholder="Dirección completa de la oficina"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="latitude" class="form-label">Latitud</label>
+                                    <input type="number" class="form-control" id="latitude" name="latitude" step="any" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="longitude" class="form-label">Longitud</label>
+                                    <input type="number" class="form-control" id="longitude" name="longitude" step="any" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex">
+                            <button type="button" class="btn btn-primary btn-modern" id="getLocationBtn">
+                                <i class="fas fa-location-arrow me-2"></i>
+                                Obtener Mi Ubicación
+                            </button>
+                            <button type="submit" class="btn btn-success btn-modern" id="saveLocationBtn" disabled>
+                                <i class="fas fa-save me-2"></i>
+                                Guardar Ubicación
+                            </button>
+                            <a href="@Url.Action("Index", "OfficeLocation")" class="btn btn-secondary btn-modern">
+                                <i class="fas fa-list me-2"></i>
+                                Ver Ubicaciones
+                            </a>
+                        </div>
+                    </form>
+
+                    <div id="locationStatus" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const getLocationBtn = document.getElementById('getLocationBtn');
+            const saveLocationBtn = document.getElementById('saveLocationBtn');
+            const locationForm = document.getElementById('locationForm');
+            const locationStatus = document.getElementById('locationStatus');
+            const latitudeInput = document.getElementById('latitude');
+            const longitudeInput = document.getElementById('longitude');
+
+            getLocationBtn.addEventListener('click', function() {
+                if (!navigator.geolocation) {
+                    showStatus('Geolocalización no es soportada por este navegador.', 'danger');
+                    return;
+                }
+
+                getLocationBtn.disabled = true;
+                getLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Obteniendo ubicación...';
+                showStatus('Obteniendo tu ubicación actual...', 'info');
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        
+                        latitudeInput.value = lat.toFixed(6);
+                        longitudeInput.value = lng.toFixed(6);
+                        
+                        saveLocationBtn.disabled = false;
+                        getLocationBtn.disabled = false;
+                        getLocationBtn.innerHTML = '<i class="fas fa-location-arrow me-2"></i>Obtener Mi Ubicación';
+                        
+                        showStatus(`Ubicación obtenida: ${lat.toFixed(6)}, ${lng.toFixed(6)}`, 'success');
+                    },
+                    function(error) {
+                        getLocationBtn.disabled = false;
+                        getLocationBtn.innerHTML = '<i class="fas fa-location-arrow me-2"></i>Obtener Mi Ubicación';
+                        
+                        let errorMessage = 'Error al obtener la ubicación: ';
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage += 'Permiso denegado por el usuario.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage += 'Información de ubicación no disponible.';
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage += 'Tiempo de espera agotado.';
+                                break;
+                            default:
+                                errorMessage += 'Error desconocido.';
+                                break;
+                        }
+                        
+                        showStatus(errorMessage, 'danger');
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            });
+
+            locationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(locationForm);
+                const data = {
+                    latitude: parseFloat(formData.get('latitude')),
+                    longitude: parseFloat(formData.get('longitude')),
+                    name: formData.get('name'),
+                    address: formData.get('address'),
+                    radiusMeters: parseInt(formData.get('radiusMeters'))
+                };
+
+                saveLocationBtn.disabled = true;
+                saveLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
+                showStatus('Guardando ubicación...', 'info');
+
+                fetch('@Url.Action("SetCurrentLocation", "OfficeLocation")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        showStatus(result.message, 'success');
+                        setTimeout(() => {
+                            window.location.href = '@Url.Action("Index", "OfficeLocation")';
+                        }, 2000);
+                    } else {
+                        showStatus(result.message, 'danger');
+                    }
+                })
+                .catch(error => {
+                    showStatus('Error al guardar la ubicación: ' + error.message, 'danger');
+                })
+                .finally(() => {
+                    saveLocationBtn.disabled = false;
+                    saveLocationBtn.innerHTML = '<i class="fas fa-save me-2"></i>Guardar Ubicación';
+                });
+            });
+
+            function showStatus(message, type) {
+                locationStatus.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>`;
+            }
+        });
+    </script>
+}
