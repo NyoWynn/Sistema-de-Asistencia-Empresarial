@@ -3,7 +3,7 @@
 <html lang="es">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>@ViewData["Title"] - Sistema de Asistencia</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -18,7 +18,8 @@
                 <!-- Logo y Brand -->
                 <a class="navbar-brand modern-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <i class="fas fa-clock me-2"></i>
-                    <span class="brand-text">SistemaAsistencia</span>
+                    <span class="brand-text d-none d-sm-inline">SistemaAsistencia</span>
+                    <span class="brand-text d-sm-none">Sistema</span>
                 </a>
                 
                 <!-- Toggle Button -->
@@ -76,7 +77,7 @@
                                     <div class="user-avatar">
                                         <i class="fas fa-user"></i>
                                     </div>
-                                    <div class="user-info ms-2">
+                                    <div class="user-info ms-2 d-none d-md-block">
                                         <div class="user-name">@Context.Session.GetString("UserName")</div>
                                         <div class="user-role">@(Context.Session.GetString("IsAdmin") == "True" ? "Administrador" : "Empleado")</div>
                                     </div>

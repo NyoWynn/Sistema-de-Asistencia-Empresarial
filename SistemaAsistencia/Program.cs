@@ -7,9 +7,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-
+// Configurar base de datos según el entorno
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure()));
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        // SQL Server para desarrollo
+        options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
+    }
+    else
+    {
+        // SQLite para producción (AWS)
+        options.UseSqlite(connectionString);
+    }
+});
 
 
 

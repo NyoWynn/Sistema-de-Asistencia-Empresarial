@@ -315,6 +315,8 @@ body.modern-layout {
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablet y móviles grandes */
 @media (max-width: 768px) {
   .modern-header .navbar {
     padding: 0.75rem 0;
@@ -335,8 +337,43 @@ body.modern-layout {
   .modern-user-dropdown {
     padding: 0.5rem !important;
   }
+  
+  /* Tablas responsivas */
+  .table-responsive {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Cards más compactas */
+  .modern-card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Botones más grandes para móviles */
+  .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    min-height: 44px; /* Tamaño mínimo táctil */
+  }
+  
+  /* Formularios más espaciados */
+  .form-control {
+    padding: 0.75rem;
+    font-size: 16px; /* Previene zoom en iOS */
+  }
+  
+  /* Dropdown más accesible */
+  .dropdown-menu {
+    min-width: 200px;
+  }
+  
+  .dropdown-item {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
 }
 
+/* Móviles pequeños */
 @media (max-width: 576px) {
   .modern-brand .brand-text {
     display: none;
@@ -344,6 +381,80 @@ body.modern-layout {
   
   .footer-brand span {
     display: none;
+  }
+  
+  /* Contenedor más compacto */
+  .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  /* Cards sin margen lateral */
+  .modern-card {
+    margin-left: -5px;
+    margin-right: -5px;
+    border-radius: 0;
+  }
+  
+  /* Tablas completamente responsivas */
+  .table {
+    font-size: 0.875rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem;
+  }
+  
+  /* Botones de acción más grandes */
+  .btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Navegación más compacta */
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0.75rem !important;
+  }
+  
+  /* Footer más compacto */
+  .modern-footer {
+    padding: 1rem 0;
+    text-align: center;
+  }
+  
+  .footer-info {
+    font-size: 0.8rem;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 375px) {
+  .modern-header .navbar {
+    padding: 0.5rem 0;
+  }
+  
+  .modern-brand {
+    font-size: 1.1rem;
+  }
+  
+  .modern-main {
+    padding: 0.5rem 0;
+  }
+  
+  /* Texto más pequeño pero legible */
+  .table {
+    font-size: 0.8rem;
+  }
+  
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+  
+  /* Cards más compactas */
+  .card-body {
+    padding: 1rem 0.75rem;
   }
 }
 

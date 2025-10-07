@@ -21,7 +21,7 @@
 <hr />
 
 <form asp-action="MonthlyReport" method="get" class="row g-3 align-items-end mb-4">
-    <div class="col-md-2">
+    <div class="col-md-2 col-sm-6 col-6">
         <label asp-for="Month" class="form-label"></label>
         <select asp-for="Month" class="form-select">
             @for (int i = 1; i <= 12; i++)
@@ -30,15 +30,15 @@
             }
         </select>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2 col-sm-6 col-6">
         <label asp-for="Year" class="form-label"></label>
         <input asp-for="Year" class="form-control" type="number" min="2020" max="@DateTime.Now.Year" />
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 col-sm-12 col-12">
         <label for="searchName" class="form-label">Buscar por nombre:</label>
         <input type="text" name="searchName" value="@Model.SearchName" class="form-control" placeholder="Nombre del empleado..." />
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2 col-sm-6 col-6">
         <label for="pageSize" class="form-label">Empleados por página:</label>
         <select name="pageSize" class="form-select">
             <option value="5" selected="@(Model.PageSize == 5)">5</option>
@@ -47,7 +47,7 @@
             <option value="50" selected="@(Model.PageSize == 50)">50</option>
         </select>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 col-sm-6 col-6">
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-search"></i> Generar Reporte
         </button>
