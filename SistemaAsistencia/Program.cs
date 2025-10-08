@@ -3,53 +3,44 @@ using SistemaAsistencia.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Lee ambas cadenas; cada env definirá la que use
+var sqlServerConn = builder.Configuration.GetConnectionString("SqlServer");
+var sqliteConn    = builder.Configuration.GetConnectionString("Sqlite");
 
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Configurar base de datos según el entorno
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     if (builder.Environment.IsDevelopment())
     {
-        // SQL Server para desarrollo
-        options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
+        options.UseSqlServer(sqlServerConn, sql => sql.EnableRetryOnFailure());
     }
     else
     {
-        // SQLite para producción (AWS)
-        options.UseSqlite(connectionString);
+        options.UseSqlite(sqliteConn);
     }
 });
-
-
-
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<SistemaAsistencia.Services.QrService>();
 builder.Services.AddScoped<SistemaAsistencia.Services.IEmailService, SistemaAsistencia.Services.EmailService>();
 builder.Services.AddScoped<SistemaAsistencia.Services.IGeolocationService, SistemaAsistencia.Services.GeolocationService>();
 
-
-builder.Services.AddSession(options =>
+builder.Services.AddSession(o =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(20);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    o.IdleTimeout = TimeSpan.FromMinutes(20);
+    o.Cookie.HttpOnly = true;
+    o.Cookie.IsEssential = true;
 });
 
 var app = builder.Build();
 
-// Inicializar la base de datos y crear datos por defecto
+// Migraciones/seed
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
-        // Aplicar migraciones automáticamente
         context.Database.Migrate();
-        
-        // Crear configuración de empresa por defecto si no existe
+
         if (!context.CompanySettings.Any())
         {
             context.CompanySettings.Add(new CompanySettings
@@ -67,23 +58,20 @@ using (var scope = app.Services.CreateScope())
             context.SaveChanges();
         }
 
-        // Crear usuario administrador por defecto si no existe
         if (!context.Users.Any(u => u.IsAdmin))
         {
             context.Users.Add(new User
             {
                 Name = "Administrador",
                 Email = "admin@sistema.com",
-                Password = "admin123", // Contraseña por defecto
+                Password = "admin123",
                 IsAdmin = true
             });
             context.SaveChanges();
         }
-
     }
     catch (Exception ex)
     {
-        // Log del error si es necesario
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "Error al inicializar la base de datos");
     }
@@ -95,14 +83,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// Si no tienes HTTPS en Nginx aún, puedes desactivar esta línea en prod.
+// app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
-
-
 app.UseSession();
-
 
 app.MapControllerRoute(
     name: "default",
