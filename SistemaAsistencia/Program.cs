@@ -33,14 +33,20 @@ builder.Services.AddSession(o =>
 
 var app = builder.Build();
 
-// Migraciones/seed
+// Inicialización de base de datos (solo para desarrollo)
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
-        context.Database.Migrate();
+        // Solo ejecutar migraciones en desarrollo (SQL Server)
+        if (builder.Environment.IsDevelopment())
+        {
+            context.Database.Migrate();
+        }
+        // En producción (SQLite), las tablas se crean manualmente con el script SQL
 
+        // Verificar y crear datos por defecto si no existen
         if (!context.CompanySettings.Any())
         {
             context.CompanySettings.Add(new CompanySettings
