@@ -1,56 +1,57 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Script de despliegue para AWS
-# Sistema de Asistencia Empresarial
+# === Parámetros del despliegue ===
+APP_ROOT="$HOME/Sistema-de-Asistencia-Empresarial/SistemaAsistencia"
+PUBLISH_DIR="/var/www/demo"
+SERVICE="asistencia"
+DB_FILE="$PUBLISH_DIR/app.db"
 
-echo "🚀 Iniciando despliegue en AWS..."
+echo "🏷  APP_ROOT=$APP_ROOT"
+echo "🏷  PUBLISH_DIR=$PUBLISH_DIR"
+echo "🏷  SERVICE=$SERVICE"
+echo "🏷  DB_FILE=$DB_FILE"
 
-# Configurar variables de entorno
-export ASPNETCORE_ENVIRONMENT=Production
-export ASPNETCORE_URLS=http://0.0.0.0:5000
-
-# Crear backup de la base de datos si existe
-if [ -f "sistema_asistencia.db" ]; then
-    echo "📦 Creando backup de la base de datos..."
-    cp sistema_asistencia.db "sistema_asistencia_backup_$(date +%Y%m%d_%H%M%S).db"
-fi
-
-# Actualizar código desde Git
-echo "📥 Actualizando código desde Git..."
-git pull origin main
-
-# Restaurar dependencias
+# === Preparar entorno ===
 echo "📦 Restaurando dependencias..."
-dotnet restore
+cd "$APP_ROOT"
+~/.dotnet/dotnet restore
 
-# Compilar la aplicación
-echo "🔨 Compilando aplicación..."
-dotnet build -c Release
+echo "🔨 Compilando (Release)..."
+~/.dotnet/dotnet build -c Release
 
-# Aplicar migraciones si es necesario
-echo "🗄️ Aplicando migraciones de base de datos..."
-dotnet ef database update
+# === Parar servicio antes de publicar ===
+echo "🛑 Deteniendo servicio $SERVICE..."
+sudo systemctl stop "$SERVICE" || true
 
-# Detener procesos existentes
-echo "🛑 Deteniendo procesos existentes..."
-pkill -f "dotnet.*SistemaAsistencia" || true
+# === Publicar artefactos a /var/www/demo ===
+echo "📤 Publicando a $PUBLISH_DIR ..."
+sudo mkdir -p "$PUBLISH_DIR"
+~/.dotnet/dotnet publish -c Release -o "$PUBLISH_DIR"
 
-# Iniciar la aplicación
-echo "▶️ Iniciando aplicación..."
-nohup dotnet run --configuration Release > sistema_asistencia.log 2>&1 &
+# Propietarios/permiso sensatos
+echo "🔧 Ajustando permisos..."
+sudo chown -R ubuntu:www-data "$PUBLISH_DIR"
+sudo find "$PUBLISH_DIR" -type f -name "*.dll" -exec chmod 640 {} \;
 
-# Esperar un momento para que la aplicación inicie
-sleep 5
+# === Migraciones en SQLite (usa el archivo de prod) ===
+echo "🗄️ Aplicando migraciones en SQLite..."
+# Asegura herramientas EF disponibles
+~/.dotnet/dotnet tool install --global dotnet-ef >/dev/null 2>&1 || true
+export PATH="$PATH:$HOME/.dotnet/tools"
 
-# Verificar que la aplicación esté ejecutándose
-if pgrep -f "dotnet.*SistemaAsistencia" > /dev/null; then
-    echo "✅ Aplicación desplegada exitosamente!"
-    echo "📊 Logs disponibles en: sistema_asistencia.log"
-    echo "🌐 Aplicación ejecutándose en: http://localhost:5000"
-else
-    echo "❌ Error al iniciar la aplicación"
-    echo "📋 Revisar logs en: sistema_asistencia.log"
-    exit 1
-fi
+# Ejecuta migraciones apuntando explícitamente al archivo SQLite de prod
+dotnet-ef database update \
+  --project "$APP_ROOT" \
+  --connection "Data Source=$DB_FILE"
 
-echo "🎉 Despliegue completado!"
+# === Reiniciar servicio con las variables adecuadas ===
+# (El unit ya debe tener estas Environment=, pero las recordamos por si faltan)
+echo "🚀 Iniciando servicio $SERVICE..."
+sudo systemctl daemon-reload
+sudo systemctl start "$SERVICE"
+sleep 2
+sudo systemctl status "$SERVICE" --no-pager || true
+
+echo "✅ Despliegue completado."
+echo "ℹ️  Prueba localmente:  curl -I http://127.0.0.1:5000"
