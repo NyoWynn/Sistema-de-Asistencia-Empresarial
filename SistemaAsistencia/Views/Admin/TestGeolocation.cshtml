@@ -1,0 +1,329 @@
+@{
+    ViewData["Title"] = "Prueba de Geolocalización";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="modern-card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        Prueba de Geolocalización GPS
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Instrucciones:</strong> Esta página te permite probar la funcionalidad de geolocalización y simular el marcado de asistencia con GPS.
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Tu Ubicación Actual:</label>
+                                <div id="currentLocation" class="form-control bg-light">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>Obteniendo ubicación...
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Oficina Configurada:</label>
+                                <div id="officeLocation" class="form-control bg-light">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>Cargando configuración...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Distancia a la Oficina:</label>
+                                <div id="distance" class="form-control bg-light">
+                                    Calculando...
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Estado de Validación:</label>
+                                <div id="validationStatus" class="form-control bg-light">
+                                    Validando...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex">
+                        <button type="button" class="btn btn-primary btn-modern" id="getLocationBtn">
+                            <i class="fas fa-location-arrow me-2"></i>
+                            Obtener Mi Ubicación
+                        </button>
+                        <button type="button" class="btn btn-success btn-modern" id="testAttendanceBtn" disabled>
+                            <i class="fas fa-clock me-2"></i>
+                            Simular Marcar Asistencia
+                        </button>
+                        <button type="button" class="btn btn-warning btn-modern" id="testOutsideBtn">
+                            <i class="fas fa-home me-2"></i>
+                            Simular Fuera de Oficina
+                        </button>
+                    </div>
+
+                    <div id="testResults" class="mt-4"></div>
+                    
+                    <!-- Token CSRF oculto para las pruebas -->
+                    @Html.AntiForgeryToken()
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentLocation = null;
+        let officeLocation = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const getLocationBtn = document.getElementById('getLocationBtn');
+            const testAttendanceBtn = document.getElementById('testAttendanceBtn');
+            const testOutsideBtn = document.getElementById('testOutsideBtn');
+            const testResults = document.getElementById('testResults');
+
+            // Cargar configuración de oficina
+            loadOfficeLocation();
+
+            getLocationBtn.addEventListener('click', getCurrentLocation);
+            testAttendanceBtn.addEventListener('click', testAttendance);
+            testOutsideBtn.addEventListener('click', testOutsideLocation);
+
+            function loadOfficeLocation() {
+                fetch('/OfficeLocation/GetActiveLocation')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.location) {
+                            officeLocation = data.location;
+                            document.getElementById('officeLocation').innerHTML = `
+                                <strong>${data.location.name}</strong><br>
+                                <small>${data.location.address}</small><br>
+                                <small>Radio: ${data.location.radiusMeters}m</small>
+                            `;
+                        } else {
+                            document.getElementById('officeLocation').innerHTML = `
+                                <span class="text-warning">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    No hay oficina configurada
+                                </span>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        document.getElementById('officeLocation').innerHTML = `
+                            <span class="text-danger">
+                                <i class="fas fa-times-circle me-2"></i>
+                                Error al cargar configuración
+                            </span>
+                        `;
+                    });
+            }
+
+            function getCurrentLocation() {
+                if (!navigator.geolocation) {
+                    showResult('Geolocalización no es soportada por este navegador.', 'danger');
+                    return;
+                }
+
+                getLocationBtn.disabled = true;
+                getLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Obteniendo ubicación...';
+
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        currentLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        };
+
+                        document.getElementById('currentLocation').innerHTML = `
+                            <strong>Lat:</strong> ${currentLocation.latitude.toFixed(6)}<br>
+                            <strong>Lng:</strong> ${currentLocation.longitude.toFixed(6)}
+                        `;
+
+                        if (officeLocation) {
+                            calculateDistance();
+                        }
+
+                        getLocationBtn.disabled = false;
+                        getLocationBtn.innerHTML = '<i class="fas fa-location-arrow me-2"></i>Obtener Mi Ubicación';
+                        testAttendanceBtn.disabled = false;
+
+                        showResult('✅ Ubicación obtenida exitosamente', 'success');
+                    },
+                    error => {
+                        let errorMessage = 'Error al obtener la ubicación: ';
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage += 'Permiso denegado por el usuario.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage += 'Información de ubicación no disponible.';
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage += 'Tiempo de espera agotado.';
+                                break;
+                            default:
+                                errorMessage += 'Error desconocido.';
+                                break;
+                        }
+                        
+                        document.getElementById('currentLocation').innerHTML = `
+                            <span class="text-danger">
+                                <i class="fas fa-times-circle me-2"></i>
+                                ${errorMessage}
+                            </span>
+                        `;
+
+                        getLocationBtn.disabled = false;
+                        getLocationBtn.innerHTML = '<i class="fas fa-location-arrow me-2"></i>Obtener Mi Ubicación';
+                        showResult(errorMessage, 'danger');
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            }
+
+            function calculateDistance() {
+                if (!currentLocation || !officeLocation) return;
+
+                const distance = calculateDistanceBetweenPoints(
+                    currentLocation.latitude, currentLocation.longitude,
+                    officeLocation.latitude, officeLocation.longitude
+                );
+
+                const isWithinRadius = distance <= officeLocation.radiusMeters;
+
+                document.getElementById('distance').innerHTML = `
+                    <strong>${distance.toFixed(0)} metros</strong>
+                `;
+
+                document.getElementById('validationStatus').innerHTML = isWithinRadius ? 
+                    '<span class="text-success"><i class="fas fa-check-circle me-2"></i>Dentro del radio permitido</span>' :
+                    '<span class="text-danger"><i class="fas fa-times-circle me-2"></i>Fuera del radio permitido</span>';
+            }
+
+            function calculateDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
+                const R = 6371000; // Radio de la Tierra en metros
+                const dLat = toRadians(lat2 - lat1);
+                const dLon = toRadians(lon2 - lon1);
+                const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return R * c;
+            }
+
+            function toRadians(degrees) {
+                return degrees * Math.PI / 180;
+            }
+
+            function testAttendance() {
+                if (!currentLocation) {
+                    showResult('Primero obtén tu ubicación actual', 'warning');
+                    return;
+                }
+
+                testAttendanceBtn.disabled = true;
+                testAttendanceBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Probando...';
+
+                // Simular el envío de asistencia
+                const formData = new FormData();
+                formData.append('recordType', 'Entrada');
+                formData.append('latitude', currentLocation.latitude);
+                formData.append('longitude', currentLocation.longitude);
+
+                // Obtener token CSRF
+                const token = document.querySelector('input[name="__RequestVerificationToken"]');
+                if (token) {
+                    formData.append('__RequestVerificationToken', token.value);
+                }
+
+                // Crear un timeout para evitar cargado infinito
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('Timeout: La petición tardó demasiado')), 10000);
+                });
+
+                const fetchPromise = fetch('/Attendance/MarkAttendance', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                Promise.race([fetchPromise, timeoutPromise])
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    console.log('Response redirected:', response.redirected);
+                    
+                    if (response.redirected) {
+                        // Si hay redirección, seguirla
+                        showResult('✅ Asistencia marcada exitosamente. Redirigiendo...', 'success');
+                        setTimeout(() => {
+                            window.location.href = response.url;
+                        }, 1000);
+                    } else if (response.ok) {
+                        // Si no hay redirección pero está OK, mostrar éxito
+                        testAttendanceBtn.disabled = false;
+                        testAttendanceBtn.innerHTML = '<i class="fas fa-clock me-2"></i>Simular Marcar Asistencia';
+                        showResult('✅ Prueba de asistencia completada exitosamente', 'success');
+                    } else {
+                        // Si hay error HTTP, intentar obtener el mensaje
+                        return response.text().then(text => {
+                            throw new Error(`HTTP ${response.status}: ${response.statusText}. ${text}`);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en prueba de asistencia:', error);
+                    testAttendanceBtn.disabled = false;
+                    testAttendanceBtn.innerHTML = '<i class="fas fa-clock me-2"></i>Simular Marcar Asistencia';
+                    showResult('❌ Error en la prueba: ' + error.message, 'danger');
+                });
+            }
+
+            function testOutsideLocation() {
+                // Simular ubicación fuera de la oficina (ejemplo: casa)
+                const fakeLocation = {
+                    latitude: -12.046374 + (Math.random() - 0.5) * 0.01, // Variación pequeña
+                    longitude: -77.042793 + (Math.random() - 0.5) * 0.01
+                };
+
+                document.getElementById('currentLocation').innerHTML = `
+                    <strong>Lat:</strong> ${fakeLocation.latitude.toFixed(6)}<br>
+                    <strong>Lng:</strong> ${fakeLocation.longitude.toFixed(6)}<br>
+                    <small class="text-warning">(Ubicación simulada)</small>
+                `;
+
+                currentLocation = fakeLocation;
+
+                if (officeLocation) {
+                    calculateDistance();
+                }
+
+                testAttendanceBtn.disabled = false;
+                showResult('📍 Ubicación simulada configurada (fuera de oficina)', 'info');
+            }
+
+            function showResult(message, type) {
+                testResults.innerHTML = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-triangle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+            }
+        });
+    </script>
+}

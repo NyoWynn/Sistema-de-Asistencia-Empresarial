@@ -259,28 +259,22 @@
                 const button = recordType === 'Entrada' ? clockInBtn : clockOutBtn;
                 const originalText = button.innerHTML;
                 
-                // Deshabilitar botón y mostrar loading
+                // Deshabilitar botón silenciosamente
                 button.disabled = true;
-                button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Obteniendo ubicación...';
-                showLocationStatus('Obteniendo tu ubicación actual...', 'info');
+                button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
 
                 getCurrentLocation()
                     .then(location => {
-                        // Mostrar éxito
-                        button.innerHTML = '<i class="fas fa-check me-2"></i>Ubicación obtenida';
-                        showLocationStatus(`Ubicación obtenida: ${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)}`, 'success');
-                        
-                        // Configurar formulario y enviar
+                        // Configurar formulario y enviar inmediatamente
                         recordTypeInput.value = recordType;
                         latitudeInput.value = location.latitude;
                         longitudeInput.value = location.longitude;
                         
-                        setTimeout(() => {
-                            attendanceForm.submit();
-                        }, 1000);
+                        // Enviar formulario sin mostrar mensajes
+                        attendanceForm.submit();
                     })
                     .catch(error => {
-                        // Restaurar botón
+                        // Restaurar botón y mostrar error solo si es necesario
                         button.disabled = false;
                         button.innerHTML = originalText;
                         showLocationStatus(error.message, 'danger');

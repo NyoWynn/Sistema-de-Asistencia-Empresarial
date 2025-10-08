@@ -19,6 +19,7 @@
                     </div>
 
                     <form id="locationForm">
+                        @Html.AntiForgeryToken()
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -36,8 +37,11 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="address" class="form-label">Dirección</label>
-                            <textarea class="form-control" id="address" name="address" rows="2" placeholder="Dirección completa de la oficina"></textarea>
+                            <label class="form-label">Dirección (Auto-generada)</label>
+                            <div class="form-control bg-light" id="autoAddress">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Se generará automáticamente desde las coordenadas GPS
+                            </div>
                         </div>
 
                         <div class="row">
@@ -106,11 +110,14 @@
                         latitudeInput.value = lat.toFixed(6);
                         longitudeInput.value = lng.toFixed(6);
                         
+                        // Actualizar dirección automáticamente
+                        updateAddress(lat, lng);
+                        
                         saveLocationBtn.disabled = false;
                         getLocationBtn.disabled = false;
                         getLocationBtn.innerHTML = '<i class="fas fa-location-arrow me-2"></i>Obtener Mi Ubicación';
                         
-                        showStatus(`Ubicación obtenida: ${lat.toFixed(6)}, ${lng.toFixed(6)}`, 'success');
+                        showStatus(`✅ Ubicación obtenida: ${lat.toFixed(6)}, ${lng.toFixed(6)}`, 'success');
                     },
                     function(error) {
                         getLocationBtn.disabled = false;
@@ -145,13 +152,28 @@
             locationForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                const formData = new FormData(locationForm);
+                const latitude = parseFloat(latitudeInput.value);
+                const longitude = parseFloat(longitudeInput.value);
+                const name = document.getElementById('name').value;
+                const radiusMeters = parseInt(document.getElementById('radiusMeters').value);
+
+                if (!latitude || !longitude) {
+                    showStatus('Por favor, obtén tu ubicación primero', 'warning');
+                    return;
+                }
+
+                // Obtener la dirección del campo auto-generado
+                const addressElement = document.getElementById('autoAddress');
+                const address = addressElement.querySelector('strong') ? 
+                    addressElement.querySelector('strong').textContent : 
+                    `Ubicación GPS: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+
                 const data = {
-                    latitude: parseFloat(formData.get('latitude')),
-                    longitude: parseFloat(formData.get('longitude')),
-                    name: formData.get('name'),
-                    address: formData.get('address'),
-                    radiusMeters: parseInt(formData.get('radiusMeters'))
+                    latitude: latitude,
+                    longitude: longitude,
+                    name: name,
+                    address: address,
+                    radiusMeters: radiusMeters
                 };
 
                 saveLocationBtn.disabled = true;
@@ -166,25 +188,69 @@
                     },
                     body: JSON.stringify(data)
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(result => {
                     if (result.success) {
-                        showStatus(result.message, 'success');
+                        showStatus('✅ Ubicación guardada exitosamente', 'success');
                         setTimeout(() => {
                             window.location.href = '@Url.Action("Index", "OfficeLocation")';
-                        }, 2000);
+                        }, 1500);
                     } else {
-                        showStatus(result.message, 'danger');
+                        showStatus('❌ Error: ' + result.message, 'danger');
                     }
                 })
                 .catch(error => {
-                    showStatus('Error al guardar la ubicación: ' + error.message, 'danger');
+                    console.error('Error:', error);
+                    showStatus('❌ Error al guardar: ' + error.message, 'danger');
                 })
                 .finally(() => {
                     saveLocationBtn.disabled = false;
                     saveLocationBtn.innerHTML = '<i class="fas fa-save me-2"></i>Guardar Ubicación';
                 });
             });
+
+            function updateAddress(lat, lng) {
+                // Mostrar coordenadas mientras se obtiene la dirección
+                document.getElementById('autoAddress').innerHTML = `
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    Obteniendo dirección...
+                `;
+
+                // Usar Nominatim (OpenStreetMap) para geocodificación inversa
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let address = 'Dirección no disponible';
+                        
+                        if (data && data.display_name) {
+                            // Limpiar y formatear la dirección
+                            address = data.display_name
+                                .split(',')
+                                .slice(0, 3) // Tomar solo los primeros 3 elementos (calle, ciudad, país)
+                                .join(', ')
+                                .trim();
+                        }
+                        
+                        document.getElementById('autoAddress').innerHTML = `
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <strong>${address}</strong><br>
+                            <small class="text-muted">GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
+                        `;
+                    })
+                    .catch(error => {
+                        console.log('Error obteniendo dirección:', error);
+                        document.getElementById('autoAddress').innerHTML = `
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <strong>Ubicación GPS</strong><br>
+                            <small class="text-muted">${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
+                        `;
+                    });
+            }
 
             function showStatus(message, type) {
                 locationStatus.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">

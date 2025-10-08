@@ -1,0 +1,99 @@
+@model SistemaAsistencia.Models.OfficeLocation
+@{
+    ViewData["Title"] = "Editar Ubicación de Oficina";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="modern-card">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        @ViewData["Title"]
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Name" class="form-label"></label>
+                                    <input asp-for="Name" class="form-control" placeholder="Ej: Oficina Principal" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="RadiusMeters" class="form-label"></label>
+                                    <input asp-for="RadiusMeters" class="form-control" min="10" max="1000" />
+                                    <div class="form-text">Radio de tolerancia en metros (10-1000)</div>
+                                    <span asp-validation-for="RadiusMeters" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label"></label>
+                            <textarea asp-for="Address" class="form-control" rows="2" placeholder="Dirección completa de la oficina"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Latitude" class="form-label"></label>
+                                    <input asp-for="Latitude" class="form-control" step="any" placeholder="Ej: -12.046374" />
+                                    <div class="form-text">Latitud (-90 a 90)</div>
+                                    <span asp-validation-for="Latitude" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Longitude" class="form-label"></label>
+                                    <input asp-for="Longitude" class="form-control" step="any" placeholder="Ej: -77.042793" />
+                                    <div class="form-text">Longitud (-180 a 180)</div>
+                                    <span asp-validation-for="Longitude" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="2" placeholder="Descripción opcional de la ubicación"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                                <label asp-for="IsActive" class="form-check-label">
+                                    Activar esta ubicación
+                                </label>
+                                <div class="form-text">Solo una ubicación puede estar activa a la vez</div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex">
+                            <button type="submit" class="btn btn-warning btn-modern">
+                                <i class="fas fa-save me-2"></i>Guardar Cambios
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary btn-modern">
+                                <i class="fas fa-arrow-left me-2"></i>Volver al Listado
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

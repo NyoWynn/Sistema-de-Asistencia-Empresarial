@@ -826,5 +826,17 @@ namespace SistemaAsistencia.Controllers
                 return Json(new { success = false, message = $"Error al enviar email de prueba: {ex.Message}" });
             }
         }
+
+        // GET: Admin/OfficeLocation
+        public IActionResult OfficeLocation()
+        {
+            return RedirectToAction("Index", "OfficeLocation");
+        }
+
+        // GET: Admin/TestGeolocation
+        public IActionResult TestGeolocation()
+        {
+            return View();
+        }
     }
 }

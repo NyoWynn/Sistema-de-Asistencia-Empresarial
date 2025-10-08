@@ -5,6 +5,14 @@ using SistemaAsistencia.Services;
 
 namespace SistemaAsistencia.Controllers
 {
+    public class SetLocationRequest
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string? Name { get; set; }
+        public string? Address { get; set; }
+        public int RadiusMeters { get; set; } = 100;
+    }
     public class OfficeLocationController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -184,8 +192,7 @@ namespace SistemaAsistencia.Controllers
 
         // POST: OfficeLocation/SetCurrentLocation
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetCurrentLocation(double latitude, double longitude, string name, string address, int radiusMeters = 100)
+        public async Task<IActionResult> SetCurrentLocation([FromBody] SetLocationRequest request)
         {
             try
             {
@@ -202,11 +209,11 @@ namespace SistemaAsistencia.Controllers
                 // Crear nueva ubicación
                 var officeLocation = new OfficeLocation
                 {
-                    Name = name ?? "Ubicación Principal",
-                    Address = address ?? "Dirección no especificada",
-                    Latitude = latitude,
-                    Longitude = longitude,
-                    RadiusMeters = radiusMeters,
+                    Name = request.Name ?? "Ubicación Principal",
+                    Address = request.Address ?? "Dirección no especificada",
+                    Latitude = request.Latitude,
+                    Longitude = request.Longitude,
+                    RadiusMeters = request.RadiusMeters,
                     IsActive = true,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
@@ -216,8 +223,40 @@ namespace SistemaAsistencia.Controllers
                 _context.Add(officeLocation);
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = $"Ubicación de oficina configurada exitosamente. Radio: {radiusMeters}m";
+                TempData["SuccessMessage"] = $"Ubicación de oficina configurada exitosamente. Radio: {request.RadiusMeters}m";
                 return Json(new { success = true, message = "Ubicación configurada exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error: {ex.Message}" });
+            }
+        }
+
+        // GET: OfficeLocation/GetActiveLocation
+        [HttpGet]
+        public async Task<IActionResult> GetActiveLocation()
+        {
+            try
+            {
+                var activeLocation = await _context.OfficeLocations
+                    .FirstOrDefaultAsync(ol => ol.IsActive);
+
+                if (activeLocation == null)
+                {
+                    return Json(new { success = false, message = "No hay ubicación activa configurada" });
+                }
+
+                return Json(new { 
+                    success = true, 
+                    location = new {
+                        id = activeLocation.Id,
+                        name = activeLocation.Name,
+                        address = activeLocation.Address,
+                        latitude = activeLocation.Latitude,
+                        longitude = activeLocation.Longitude,
+                        radiusMeters = activeLocation.RadiusMeters
+                    }
+                });
             }
             catch (Exception ex)
             {

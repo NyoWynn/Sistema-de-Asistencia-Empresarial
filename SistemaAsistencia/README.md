@@ -14,10 +14,13 @@ Un sistema web completo y moderno para el control de asistencia de empleados des
 - **📊 Reportes Avanzados**: Reportes mensuales con paginación, búsqueda y filtros
 - **🔍 Búsqueda Inteligente**: Búsqueda de empleados en tiempo real para registro manual
 - **👥 Gestión de Perfiles**: Vista detallada de perfiles de usuario para administradores
+- **📍 Geolocalización GPS**: Validación de asistencia por proximidad a la oficina
+- **🛡️ Seguridad Anti-Fraude**: Prevención de registros desde ubicaciones no autorizadas
 
 ### Para Empleados
 - **🔐 Acceso Dual**: Login por email/contraseña o código QR
-- **⏰ Registro de Asistencia**: Marcar entrada y salida con validaciones inteligentes
+- **⏰ Registro de Asistencia**: Marcar entrada y salida con validaciones inteligentes y GPS
+- **📍 Validación GPS**: Verificación automática de ubicación antes de marcar asistencia
 - **📱 Interfaz Responsive**: Diseño moderno y adaptable a cualquier dispositivo
 - **📊 Dashboard Personal**: Vista de estadísticas personales y historial de asistencia
 - **📧 Notificaciones**: Recibe emails de confirmación de registros de asistencia
@@ -36,7 +39,9 @@ Un sistema web completo y moderno para el control de asistencia de empleados des
   - Horarios y tolerancias personalizables
   - Configuración completa de email SMTP
   - Plantillas de email personalizables
+  - **📍 Configuración de Ubicación GPS**: Definir oficina con radio de tolerancia
 - **👤 Perfiles de Usuario**: Vista detallada con estadísticas y historial
+- **🧪 Herramientas de Prueba**: Página de testing para validar funcionalidades GPS
 
 ![Panel Admin](https://cdn.discordapp.com/attachments/1424448965457477844/1424449115709771836/image.png?ex=68e3fd1e&is=68e2ab9e&hm=f26e4b7d810404fe83762b7d11081e1fb714f28104f45a0e0282f48e8226164a&)
 
@@ -59,6 +64,9 @@ Un sistema web completo y moderno para el control de asistencia de empleados des
 - **Sistema de Sesiones** - Autenticación personalizada
 - **Migraciones EF** - Gestión automática de esquema de BD
 - **Validaciones** - Prevención de registros duplicados e inválidos
+- **Geolocalización GPS** - Validación de ubicación con OpenStreetMap
+- **Geocodificación Inversa** - Conversión automática de coordenadas a direcciones
+- **Configuración Multi-Entorno** - Soporte para SQL Server (desarrollo) y SQLite (producción)
 
 ## 📋 Requisitos del Sistema
 
@@ -181,6 +189,34 @@ Configura el email en **Configuración de Empresa**:
 ### 📊 Mi Asistencia
 
 ![Mi Asistencia](https://cdn.discordapp.com/attachments/1424448965457477844/1424450456473567292/image.png?ex=68e3fe5d&is=68e2acdd&hm=f5b64cea11e1335726427d42ea6170394c0561987ab6be849f3b8d52ec04cd94&)
+
+## 📍 Sistema de Geolocalización GPS
+
+### 🛡️ Seguridad Anti-Fraude
+El sistema incluye validación GPS para prevenir registros fraudulentos de asistencia:
+
+#### Configuración de Oficina
+- **📍 Ubicación GPS**: Configuración automática desde el navegador
+- **🎯 Radio de Tolerancia**: Configurable entre 10-1000 metros
+- **🏠 Dirección Auto-Generada**: Geocodificación inversa con OpenStreetMap
+- **🔄 Múltiples Ubicaciones**: Soporte para varias oficinas con activación selectiva
+
+#### Validación de Asistencia
+- **✅ Verificación Automática**: Validación GPS antes de cada registro
+- **📏 Cálculo de Distancia**: Fórmula de Haversine para precisión
+- **❌ Prevención de Fraude**: Bloqueo de registros fuera del radio
+- **📱 Interfaz Silenciosa**: Proceso transparente para el usuario
+
+#### Herramientas de Administración
+- **🧪 Página de Prueba**: Testing completo de funcionalidades GPS
+- **📊 Información Detallada**: Distancia, validación y estado en tiempo real
+- **🔧 Configuración Intuitiva**: Interfaz amigable para administradores
+
+### Configuración Rápida
+1. **Panel de Administración** → **"Ubicación de Oficina"**
+2. **"Configurar desde GPS"** → Permite acceso a ubicación
+3. **Ajusta radio** de tolerancia según necesidades
+4. **Guarda configuración** → ¡Listo para usar!
 
 ## 📧 Sistema de Notificaciones por Email
 
@@ -353,6 +389,17 @@ ENTRYPOINT ["dotnet", "SistemaAsistencia.dll"]
 4. Selecciona **Días de Trabajo**
 
 ## 🔄 Historial de Versiones
+
+### v4.0.0 (2025-01-XX) - Sistema con Geolocalización GPS
+- ✨ **NUEVO**: Sistema completo de geolocalización GPS
+- ✨ **NUEVO**: Validación de asistencia por proximidad
+- ✨ **NUEVO**: Configuración de ubicación de oficina
+- ✨ **NUEVO**: Geocodificación inversa automática
+- ✨ **NUEVO**: Página de prueba GPS para administradores
+- ✨ **NUEVO**: Configuración multi-entorno (SQL Server/SQLite)
+- ✨ **NUEVO**: Interfaz completamente responsiva
+- 🔧 Mejoras en seguridad anti-fraude
+- 🔧 Optimizaciones de rendimiento y UX
 
 ### v3.0.0 (2024-12-XX) - Sistema Completo con Email
 - ✨ **NUEVO**: Sistema completo de notificaciones por email
