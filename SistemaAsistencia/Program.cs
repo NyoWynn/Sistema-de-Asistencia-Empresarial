@@ -3,20 +3,13 @@ using SistemaAsistencia.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Lee ambas cadenas; cada env definirá la que use
-var sqlServerConn = builder.Configuration.GetConnectionString("SqlServer");
-var sqliteConn    = builder.Configuration.GetConnectionString("Sqlite");
+// Usar SOLO SQLite en todos los entornos
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? "Data Source=sistema_asistencia.db";
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    if (builder.Environment.IsDevelopment())
-    {
-        options.UseSqlServer(sqlServerConn, sql => sql.EnableRetryOnFailure());
-    }
-    else
-    {
-        options.UseSqlite(sqliteConn);
-    }
+    options.UseSqlite(connectionString);
 });
 
 builder.Services.AddControllersWithViews();
@@ -33,18 +26,14 @@ builder.Services.AddSession(o =>
 
 var app = builder.Build();
 
-// Inicialización de base de datos (solo para desarrollo)
+// Inicialización de base de datos SQLite
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
-        // Solo ejecutar migraciones en desarrollo (SQL Server)
-        if (builder.Environment.IsDevelopment())
-        {
-            context.Database.Migrate();
-        }
-        // En producción (SQLite), las tablas se crean manualmente con el script SQL
+        // Crear base de datos si no existe (SQLite automático)
+        context.Database.EnsureCreated();
 
         // Verificar y crear datos por defecto si no existen
         if (!context.CompanySettings.Any())
