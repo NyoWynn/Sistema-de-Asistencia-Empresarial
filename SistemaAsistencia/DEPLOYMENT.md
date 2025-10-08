@@ -40,26 +40,46 @@ git clone https://github.com/NyoWynn/Sistema-de-Asistencia-Empresarial.git
 cd Sistema-de-Asistencia-Empresarial/SistemaAsistencia
 ```
 
-### 2. Configurar Variables de Entorno
+### 2. Solución Rápida (Recomendado)
 ```bash
+# Hacer el script ejecutable
+chmod +x fix-aws-sqlite.sh
+
+# Ejecutar solución automática
+./fix-aws-sqlite.sh
+```
+
+### 3. Despliegue Manual (Alternativo)
+```bash
+# Configurar variables de entorno
 export ASPNETCORE_ENVIRONMENT=Production
-```
+export ASPNETCORE_URLS=http://0.0.0.0:5000
 
-### 3. Restaurar Dependencias
-```bash
+# Crear directorio de datos
+mkdir -p /var/www/demo
+
+# Crear base de datos SQLite manualmente
+sqlite3 /var/www/demo/sistema_asistencia.db < Scripts/CreateSQLiteDatabase.sql
+
+# Restaurar dependencias y compilar
 dotnet restore
+dotnet build -c Release
+
+# Ejecutar aplicación
+dotnet run --configuration Release
 ```
 
-### 4. Ejecutar la Aplicación
+### 4. Verificación
 ```bash
-dotnet run
-```
+# Verificar tablas creadas
+sqlite3 /var/www/demo/sistema_asistencia.db ".tables"
 
-La aplicación automáticamente:
-- ✅ Creará la base de datos SQLite (`sistema_asistencia.db`)
-- ✅ Aplicará las migraciones
-- ✅ Creará el usuario administrador por defecto
-- ✅ Configurará la empresa por defecto
+# Verificar usuario administrador
+sqlite3 /var/www/demo/sistema_asistencia.db "SELECT Id, Email, IsAdmin FROM Users;"
+
+# Verificar aplicación ejecutándose
+curl http://localhost:5000
+```
 
 ## 🔄 Actualizaciones sin Perder Datos
 

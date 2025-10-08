@@ -12,8 +12,8 @@ using SistemaAsistencia.Models;
 namespace SistemaAsistencia.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251007195706_AddOfficeLocationTable")]
-    partial class AddOfficeLocationTable
+    [Migration("20251008210915_AddOfficeLocationTableSQLite")]
+    partial class AddOfficeLocationTableSQLite
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

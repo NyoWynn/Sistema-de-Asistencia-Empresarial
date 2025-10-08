@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SistemaAsistencia.Migrations
 {
     /// <inheritdoc />
-    public partial class AddOfficeLocationTable : Migration
+    public partial class AddOfficeLocationTableSQLite : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
