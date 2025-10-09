@@ -12,8 +12,8 @@ using SistemaAsistencia.Models;
 namespace SistemaAsistencia.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251009001245_AddOfficeLocationTable")]
-    partial class AddOfficeLocationTable
+    [Migration("20251009001720_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,22 +168,9 @@ namespace SistemaAsistencia.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("BaseSalary")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18, 2)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("HireDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
@@ -194,9 +181,6 @@ namespace SistemaAsistencia.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QrCode")

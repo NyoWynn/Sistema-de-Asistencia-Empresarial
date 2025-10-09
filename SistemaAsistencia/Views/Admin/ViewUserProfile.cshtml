@@ -45,13 +45,9 @@
                             <td>@Model.Email</td>
                         </tr>
                         <tr>
-                            <td><strong>Fecha de Ingreso:</strong></td>
-                            <td>@(Model.HireDate?.Day ?? 1)/@(Model.HireDate?.Month ?? 1)/@(Model.HireDate?.Year ?? DateTime.Now.Year)</td>
-                        </tr>
-                        <tr>
                             <td><strong>Estado:</strong></td>
                             <td>
-                                @if (Model.IsActive)
+                                @if (true)
                                 {
                                     <span class="badge bg-success">Activo</span>
                                 }

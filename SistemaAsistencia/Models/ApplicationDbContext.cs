@@ -18,11 +18,6 @@ namespace SistemaAsistencia.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configuración de tipos decimales
-            modelBuilder.Entity<User>()
-                .Property(u => u.BaseSalary)
-                .HasPrecision(18, 2);
-
             // Configuración de índices
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)

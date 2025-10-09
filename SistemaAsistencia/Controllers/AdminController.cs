@@ -148,8 +148,7 @@ namespace SistemaAsistencia.Controllers
             // PERO solo si fueron creados ANTES o EN la fecha del reporte
             var absentUsersQuery = _context.Users
                 .Where(u => !u.IsAdmin && 
-                           !usersWithAttendance.Contains(u.Id) &&
-                           (u.HireDate == null || u.HireDate.Value.Date <= date.Date))
+                           !usersWithAttendance.Contains(u.Id))
                 .OrderBy(u => u.Name);
 
             // Aplicar paginación
